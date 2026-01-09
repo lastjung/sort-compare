@@ -28,7 +28,8 @@ export const useSorting = (initialArray, sortingAlgorithm, speed, triggerRun, tr
       setSwapping([]);
       setStats({ comparisons: 0, swaps: 0, time: 0 });
     }
-  }, [initialArray, isRunning]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialArray]);
 
   const dynamicSleep = useCallback(() => new Promise(resolve => setTimeout(resolve, 1001 - speedRef.current)), []);
 
