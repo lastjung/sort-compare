@@ -90,7 +90,7 @@ export const MobileControlBar = ({
             {isRunningAny ? (
             <button
               onClick={onStopAll}
-              className="w-full h-12 flex items-center justify-center gap-2 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-bold shadow-lg shadow-rose-500/30 active:scale-95 transition-all"
+              className="w-full h-12 flex items-center justify-center gap-2 bg-rose-400 hover:bg-rose-300 text-white rounded-xl font-bold shadow-lg shadow-rose-400/30 active:scale-95 transition-all"
             >
               <Square size={16} fill="currentColor" /> STOP
             </button>
