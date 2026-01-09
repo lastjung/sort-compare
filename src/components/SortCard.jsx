@@ -4,7 +4,7 @@ import { SortBar } from './SortBar';
 import { cn } from '../utils/cn';
 import { Play, Activity, ArrowLeftRight, Clock } from 'lucide-react';
 
-export const SortCard = ({ title, algorithm, initialData, speed, triggerRun, triggerStop, isSelected, onToggleSelect, onEnd }) => {
+export const SortCard = ({ title, algorithm, complexity, desc, initialData, speed, triggerRun, triggerStop, isSelected, onToggleSelect, onEnd }) => {
   const { array, comparing, swapping, sorted, isRunning, stats, runSort, stop } = 
     useSorting(initialData, algorithm, speed, triggerRun, triggerStop, onEnd);
 
@@ -30,7 +30,21 @@ export const SortCard = ({ title, algorithm, initialData, speed, triggerRun, tri
               {isSelected && <div className="w-2 h-2 bg-white rounded-sm" />}
             </div>
           </div>
-          <h3 className="text-sm font-bold text-indigo-300 group-hover:text-indigo-200 transition-colors uppercase tracking-widest">{title}</h3>
+          <div className="flex items-center gap-2">
+            <h3 className="text-sm font-bold text-indigo-300 group-hover:text-indigo-200 transition-colors uppercase tracking-widest leading-none">{title}</h3>
+            {complexity && (
+              <div className="group/badge relative w-fit">
+                <span className="text-[10px] bg-slate-700/50 text-indigo-300 px-1.5 py-0.5 rounded cursor-help font-mono border border-slate-600/50 transition-colors hover:bg-indigo-500/20 hover:border-indigo-500/30 hover:text-indigo-200">
+                  {complexity}
+                </span>
+                {desc && (
+                  <div className="absolute left-0 top-full mt-2 w-48 p-2 bg-slate-900/95 backdrop-blur-xl border border-slate-700 rounded-lg shadow-xl text-xs text-slate-300 z-50 opacity-0 invisible group-hover/badge:opacity-100 group-hover/badge:visible transition-all duration-200 translate-y-2 group-hover/badge:translate-y-0 pointer-events-none">
+                    {desc}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
         
         <div className="flex gap-1.5">
