@@ -98,7 +98,7 @@ export const MobileControlBar = ({
             <button
               onClick={onRunSelected}
               disabled={selectedIds.size === 0}
-              className="w-full h-12 flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:active:scale-100 text-white rounded-xl font-bold shadow-lg shadow-emerald-500/30 active:scale-95 transition-all"
+              className="w-full h-12 flex items-center justify-center gap-2 bg-emerald-400 hover:bg-emerald-300 disabled:opacity-50 disabled:active:scale-100 text-white rounded-xl font-bold shadow-lg shadow-emerald-400/30 active:scale-95 transition-all"
             >
               <Play size={18} fill="currentColor" /> RUN
             </button>
