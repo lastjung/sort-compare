@@ -30,7 +30,7 @@ export const ControlCard = ({
   ];
 
   return (
-    <div className="bg-slate-800/60 backdrop-blur-xl border border-indigo-500/30 rounded-xl p-5 flex flex-col justify-between h-[320px] shadow-2xl relative overflow-hidden group">
+    <div className="hidden md:flex bg-slate-800/60 backdrop-blur-xl border border-indigo-500/30 rounded-xl p-5 flex-col justify-between h-[320px] shadow-2xl relative overflow-hidden group">
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent pointer-events-none" />
       
       <div>

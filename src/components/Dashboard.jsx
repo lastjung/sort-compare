@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { SortCard } from './SortCard';
 import { ControlCard } from './ControlCard';
+import { MobileControlBar } from './MobileControlBar';
 import { Scoreboard } from './Scoreboard';
 import { bubbleSort, selectionSort, insertionSort, quickSort, mergeSort } from '../algorithms';
 
@@ -108,6 +109,16 @@ export const Dashboard = ({ data, speed, onRandomize }) => {
           />
         ))}
         <ControlCard 
+          selectedIds={selectedIds}
+          onToggleSelect={toggleSelect}
+          onRunSelected={runSelected}
+          onStopAll={stopAll}
+          onReset={resetAll}
+          onSelectAll={selectAll}
+          onDeselectAll={deselectAll}
+          isRunningAny={activeIds.size > 0}
+        />
+        <MobileControlBar 
           selectedIds={selectedIds}
           onToggleSelect={toggleSelect}
           onRunSelected={runSelected}
