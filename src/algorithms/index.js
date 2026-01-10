@@ -130,3 +130,117 @@ export const mergeSort = async (array, onStep) => {
   await sort(0, arr.length - 1);
   return arr;
 };
+
+// Heap Sort
+export const heapSort = async (array, onStep) => {
+  let arr = [...array];
+  const n = arr.length;
+
+  const heapify = async (n, i) => {
+    let largest = i;
+    const left = 2 * i + 1;
+    const right = 2 * i + 2;
+
+    if (left < n) {
+      await onStep(arr, [largest, left], 'compare');
+      if (arr[left] > arr[largest]) {
+        largest = left;
+      }
+    }
+
+    if (right < n) {
+      await onStep(arr, [largest, right], 'compare');
+      if (arr[right] > arr[largest]) {
+        largest = right;
+      }
+    }
+
+    if (largest !== i) {
+      [arr[i], arr[largest]] = [arr[largest], arr[i]];
+      await onStep(arr, [i, largest], 'swap');
+      await heapify(n, largest);
+    }
+  };
+
+  // Build max heap
+  for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+    await heapify(n, i);
+  }
+
+  // Extract elements from heap
+  for (let i = n - 1; i > 0; i--) {
+    [arr[0], arr[i]] = [arr[i], arr[0]];
+    await onStep(arr, [0, i], 'swap');
+    await heapify(i, 0);
+  }
+
+  return arr;
+};
+
+// Shell Sort
+export const shellSort = async (array, onStep) => {
+  let arr = [...array];
+  const n = arr.length;
+
+  for (let gap = Math.floor(n / 2); gap > 0; gap = Math.floor(gap / 2)) {
+    for (let i = gap; i < n; i++) {
+      let temp = arr[i];
+      let j = i;
+
+      await onStep(arr, [j, j - gap], 'compare');
+      while (j >= gap && arr[j - gap] > temp) {
+        arr[j] = arr[j - gap];
+        await onStep(arr, [j, j - gap], 'swap');
+        j -= gap;
+        if (j >= gap) {
+          await onStep(arr, [j, j - gap], 'compare');
+        }
+      }
+      arr[j] = temp;
+      await onStep(arr, [j], 'swap');
+    }
+  }
+
+  return arr;
+};
+
+// Cocktail Sort (Bidirectional Bubble Sort)
+export const cocktailSort = async (array, onStep) => {
+  let arr = [...array];
+  let start = 0;
+  let end = arr.length - 1;
+  let swapped = true;
+
+  while (swapped) {
+    swapped = false;
+
+    // Forward pass (like bubble sort)
+    for (let i = start; i < end; i++) {
+      await onStep(arr, [i, i + 1], 'compare');
+      if (arr[i] > arr[i + 1]) {
+        [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+        await onStep(arr, [i, i + 1], 'swap');
+        swapped = true;
+      }
+    }
+
+    if (!swapped) break;
+
+    end--;
+    swapped = false;
+
+    // Backward pass
+    for (let i = end; i > start; i--) {
+      await onStep(arr, [i, i - 1], 'compare');
+      if (arr[i] < arr[i - 1]) {
+        [arr[i], arr[i - 1]] = [arr[i - 1], arr[i]];
+        await onStep(arr, [i, i - 1], 'swap');
+        swapped = true;
+      }
+    }
+
+    start++;
+  }
+
+  return arr;
+};

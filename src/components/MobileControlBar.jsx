@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Play, RotateCcw, Settings2, CheckSquare, Square, ChevronUp, ChevronDown } from 'lucide-react';
+import { Play, RotateCcw, Settings2, CheckSquare, Square, ChevronUp, ChevronDown, Volume2, VolumeX, Sliders, RefreshCcw } from 'lucide-react';
 import { cn } from '../utils/cn';
+import { audioEngine } from '../utils/audio';
 
 export const MobileControlBar = ({
   selectedIds,
@@ -10,9 +11,21 @@ export const MobileControlBar = ({
   onReset,
   onSelectAll,
   onDeselectAll,
-  isRunningAny
+  isRunningAny,
+  arraySize,
+  setArraySize,
+  speed,
+  setSpeed,
+  onRandomize
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(false);
+
+  const toggleSound = () => {
+    const next = !soundEnabled;
+    setSoundEnabled(next);
+    audioEngine.setEnabled(next);
+  };
 
   const ALGO_LABELS = [
     { id: 'bubble', label: 'Bubble' },
@@ -20,22 +33,50 @@ export const MobileControlBar = ({
     { id: 'insertion', label: 'Insertion' },
     { id: 'quick', label: 'Quick' },
     { id: 'merge', label: 'Merge' },
+    { id: 'heap', label: 'Heap' },
+    { id: 'shell', label: 'Shell' },
+    { id: 'cocktail', label: 'Cocktail' },
   ];
 
   return (
-    <div className="md:hidden fixed bottom-6 left-4 right-4 z-40 flex flex-col gap-2">
+    <div className="lg:hidden fixed bottom-6 left-4 right-4 z-40 flex flex-col gap-2">
       {/* Expanded Menu (Algorithm Selection) */}
       {isMenuOpen && (
         <div className="bg-slate-800/90 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-4 shadow-2xl mb-2 animate-in slide-in-from-bottom-5 fade-in duration-200">
-          <div className="flex items-center justify-between mb-3 border-b border-white/5 pb-2">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Select Algorithms</span>
-            <button
-              onClick={() => selectedIds.size === 5 ? onDeselectAll() : onSelectAll()}
-              className="text-xs text-indigo-400 font-medium active:text-indigo-300"
+          {/* Row 1: Title + Sound */}
+          <div className="flex items-center justify-between mb-3 pb-3 border-b border-white/5">
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Select Algorithms</span>
+            <button 
+              onClick={toggleSound}
+              className={cn(
+                "p-1.5 rounded transition-all",
+                soundEnabled 
+                  ? "bg-indigo-500 text-white" 
+                  : "bg-slate-700 text-slate-500"
+              )}
             >
-              {selectedIds.size === 5 ? 'Deselect All' : 'Select All'}
+              {soundEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
             </button>
           </div>
+          
+          {/* Row 2: Randomize + Select All (2-column grid) */}
+          <div className="grid grid-cols-2 gap-2 mb-3">
+            <button 
+              onClick={onRandomize}
+              className="flex items-center justify-center gap-2 py-2.5 bg-slate-100 hover:bg-white text-slate-900 rounded-lg font-bold text-xs transition-all active:scale-95"
+            >
+              <RefreshCcw size={14} />
+              Randomize
+            </button>
+            <button
+              onClick={() => selectedIds.size === 8 ? onDeselectAll() : onSelectAll()}
+              className="flex items-center justify-center py-2.5 text-xs font-bold uppercase tracking-wide rounded-lg bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 active:bg-indigo-600"
+            >
+              {selectedIds.size === 8 ? 'Deselect All' : 'Select All'}
+            </button>
+          </div>
+          
+          {/* Algorithm Selection (2-column grid) */}
           <div className="grid grid-cols-2 gap-2">
             {ALGO_LABELS.map(algo => (
               <label
@@ -56,6 +97,45 @@ export const MobileControlBar = ({
                 <span className="text-sm font-medium">{algo.label}</span>
               </label>
             ))}
+          </div>
+          
+          {/* Sliders Section */}
+          <div className="mt-4 pt-4 border-t border-white/5 grid grid-cols-2 gap-4">
+            {/* Count Slider */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex justify-between items-center">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                  <Sliders size={10} /> Count
+                </label>
+                <span className="text-[10px] font-mono text-indigo-400 font-bold">{arraySize}</span>
+              </div>
+              <input 
+                type="range" 
+                min="10" 
+                max="100" 
+                value={arraySize} 
+                onChange={(e) => setArraySize(Number(e.target.value))}
+                className="accent-indigo-500 h-1.5 w-full bg-slate-700 rounded-lg appearance-none cursor-pointer"
+              />
+            </div>
+            
+            {/* Speed Slider */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex justify-between items-center">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                  <Settings2 size={10} /> Speed
+                </label>
+                <span className="text-[10px] font-mono text-indigo-400 font-bold">{speed}</span>
+              </div>
+              <input 
+                type="range" 
+                min="1" 
+                max="1000" 
+                value={speed} 
+                onChange={(e) => setSpeed(Number(e.target.value))}
+                className="accent-indigo-500 h-1.5 w-full bg-slate-700 rounded-lg appearance-none cursor-pointer"
+              />
+            </div>
           </div>
         </div>
       )}

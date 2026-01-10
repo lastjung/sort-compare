@@ -24,7 +24,14 @@ function App() {
         onRandomize={randomize}
       />
       <main className="relative">
-        <Dashboard data={data} speed={speed} onRandomize={randomize} />
+        <Dashboard 
+          data={data} 
+          speed={speed} 
+          setSpeed={setSpeed}
+          arraySize={arraySize}
+          setArraySize={setArraySize}
+          onRandomize={randomize} 
+        />
       </main>
       
       <footer className="mt-12 py-12 border-t border-white/5 text-center">

@@ -13,9 +13,9 @@ export const Scoreboard = ({ results, onClose }) => {
   // const getRank = (title) => sortedByTime.findIndex(r => r.title === title) + 1;
   
   const getMedalColor = (rank) => {
-    if (rank === 1) return 'text-yellow-400';
-    if (rank === 2) return 'text-slate-300';
-    if (rank === 3) return 'text-amber-600';
+    if (rank === 1) return 'text-orange-400';
+    if (rank === 2) return 'text-emerald-400';
+    if (rank === 3) return 'text-yellow-400';
     return 'text-slate-500';
   };
 
@@ -43,29 +43,39 @@ export const Scoreboard = ({ results, onClose }) => {
             <span className="text-sm font-bold text-slate-400 uppercase tracking-wider">Time (seconds)</span>
           </div>
           <div className="space-y-2">
-            {sortedByTime.map((result, idx) => (
-              <div key={result.title} className="flex items-center gap-3">
-                <span className={cn("w-5 text-center font-bold", getMedalColor(idx + 1))}>
-                  {idx + 1}
-                </span>
-                <span className="w-24 text-sm text-slate-300 truncate">{result.title}</span>
-                <div className="flex-1 h-6 bg-slate-700/50 rounded-lg overflow-hidden relative">
-                  <div 
-                    className={cn(
-                      "h-full rounded-lg transition-all duration-500",
-                      idx === 0 ? "bg-gradient-to-r from-yellow-500 to-amber-400" :
-                      idx === 1 ? "bg-gradient-to-r from-slate-400 to-slate-300" :
-                      idx === 2 ? "bg-gradient-to-r from-amber-700 to-amber-600" :
-                      "bg-gradient-to-r from-indigo-600 to-indigo-500"
-                    )}
-                    style={{ width: `${(result.time / maxTime) * 100}%` }}
-                  />
-                  <span className="absolute inset-0 flex items-center justify-center text-xs font-mono text-white/80">
-                    {(result.time / 1000).toFixed(2)}s
+            {sortedByTime.map((result, idx) => {
+              const fastestTime = sortedByTime[0]?.time || 1;
+              const percentage = Math.round((result.time / fastestTime) * 100);
+              return (
+                <div key={result.title} className="flex items-center gap-3">
+                  <span className={cn("w-5 text-center font-bold", getMedalColor(idx + 1))}>
+                    {idx + 1}
                   </span>
+                  <span className={cn("w-24 text-sm truncate font-medium", getMedalColor(idx + 1))}>{result.title}</span>
+                  <div className="flex-1 h-6 bg-slate-700/50 rounded-lg overflow-hidden relative">
+                    <div 
+                      className={cn(
+                        "h-full rounded-lg transition-all duration-500",
+                        idx === 0 ? "bg-gradient-to-r from-orange-500 to-orange-400" :
+                        idx === 1 ? "bg-gradient-to-r from-emerald-500 to-emerald-400" :
+                        idx === 2 ? "bg-gradient-to-r from-yellow-500 to-yellow-400" :
+                        "bg-gradient-to-r from-indigo-600 to-indigo-500"
+                      )}
+                      style={{ width: `${(result.time / maxTime) * 100}%` }}
+                    />
+                    <span className="absolute inset-0 flex items-center justify-center gap-2 text-xs font-mono text-white/90">
+                      {(result.time / 1000).toFixed(2)}s
+                      <span className={cn(
+                        "font-bold",
+                        idx === 0 ? "text-orange-200" : "text-white/60"
+                      )}>
+                        ({percentage}%)
+                      </span>
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -79,24 +89,34 @@ export const Scoreboard = ({ results, onClose }) => {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-slate-400 border-b border-slate-700">
-                  <th className="text-left py-2 font-medium">Algorithm</th>
+                  <th className="text-left py-2 font-medium w-28">Algorithm</th>
                   <th className="text-center py-2 font-medium">Comparisons</th>
                   <th className="text-center py-2 font-medium">Swaps</th>
                   <th className="text-center py-2 font-medium">Time</th>
+                  <th className="text-center py-2 font-medium">%</th>
+                  <th className="text-center py-2 font-medium">O(n)</th>
                 </tr>
               </thead>
               <tbody>
-                {sortedByTime.map((result, idx) => (
-                  <tr key={result.title} className="border-b border-slate-700/50 text-slate-300">
-                    <td className="py-2 flex items-center gap-2">
-                      <span className={cn("font-bold", getMedalColor(idx + 1))}>{idx + 1}.</span>
-                      {result.title}
-                    </td>
-                    <td className="py-2 text-center font-mono">{result.comparisons.toLocaleString()}</td>
-                    <td className="py-2 text-center font-mono">{result.swaps.toLocaleString()}</td>
-                    <td className="py-2 text-center font-mono text-sky-400">{(result.time / 1000).toFixed(2)}s</td>
-                  </tr>
-                ))}
+                {sortedByTime.map((result, idx) => {
+                  const fastestTime = sortedByTime[0]?.time || 1;
+                  const percentage = Math.round((result.time / fastestTime) * 100);
+                  return (
+                    <tr key={result.title} className="border-b border-slate-700/50 text-slate-300">
+                      <td className={cn("py-2 flex items-center gap-1", getMedalColor(idx + 1))}>
+                        <span className="font-bold">{idx + 1}.</span>
+                        <span className="truncate">{result.title.replace(' Sort', '')}</span>
+                      </td>
+                      <td className="py-2 text-center font-mono">{result.comparisons.toLocaleString()}</td>
+                      <td className="py-2 text-center font-mono">{result.swaps.toLocaleString()}</td>
+                      <td className="py-2 text-center font-mono text-sky-400">{(result.time / 1000).toFixed(2)}s</td>
+                      <td className={cn("py-2 text-center font-bold", idx === 0 ? "text-orange-400" : "text-slate-500")}>
+                        ({percentage}%)
+                      </td>
+                      <td className="py-2 text-center font-mono text-xs text-slate-500">{result.complexity || 'O(n²)'}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
