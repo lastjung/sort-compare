@@ -9,9 +9,9 @@ SortCompare is a high-performance, aesthetically pleasing web application built 
 - **Real-time Visualization**: Watch sorting algorithms in action with smooth, high-frame-rate animations using CSS and Framer Motion.
 - **Performance Benchmarking**: Automatically tracks and displays comparisons, swaps, and total execution time for each algorithm.
 - **Audio Feedback**: Includes an interactive audio engine that plays unique tones based on the values being sorted, providing a multi-sensory learning experience.
-- **Multi-Algorithm Comparison**: Run up to 5 different algorithms simultaneously to see how they perform side-by-side.
-- **Global Control Panel**: Easily customize array size, animation speed, and toggle sound effects.
-- **Scoreboard Ranking**: A post-completion dashboard that ranks algorithms and provides a detailed statistical breakdown.
+- **Multi-Algorithm Comparison**: Run up to 8 different algorithms simultaneously to see how they perform side-by-side.
+- **Responsive Design**: Desktop control panel with sliders, plus mobile-friendly bottom drawer on tablets and phones.
+- **Scoreboard Ranking**: Post-completion dashboard with medal rankings (🥇🥈🥉), percentage comparison, and time complexity display.
 
 ## 🛠 Tech Stack
 
@@ -55,13 +55,18 @@ SortCompare is a high-performance, aesthetically pleasing web application built 
    npm run build
    ```
 
-## 🧠 Supported Algorithms
+## 🧠 Supported Algorithms (8 Total)
 
-- **Bubble Sort**: The classic O(n²) comparison sort.
-- **Selection Sort**: Simple but efficient for small datasets.
-- **Insertion Sort**: Great for nearly sorted data.
-- **Quick Sort**: Highly efficient, recursive O(n log n) algorithm.
-- **Merge Sort**: Stable, reliable O(n log n) divide-and-conquer sort.
+| Algorithm      | Complexity | Description                                      |
+| -------------- | ---------- | ------------------------------------------------ |
+| Bubble Sort    | O(n²)      | Classic comparison sort, swaps adjacent elements |
+| Selection Sort | O(n²)      | Finds minimum and moves to sorted portion        |
+| Insertion Sort | O(n²)      | Builds sorted array one element at a time        |
+| Quick Sort     | O(n log n) | Divide-and-conquer using pivot partitioning      |
+| Merge Sort     | O(n log n) | Stable divide-and-conquer with merging           |
+| Heap Sort      | O(n log n) | Uses max-heap data structure                     |
+| Shell Sort     | O(n log n) | Gap-based insertion sort variant                 |
+| Cocktail Sort  | O(n²)      | Bidirectional bubble sort                        |
 
 ## 📂 Project Structure
 
