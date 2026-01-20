@@ -143,11 +143,13 @@ export const Dashboard = ({ data, speed, setSpeed, arraySize, setArraySize, onRa
     }
   };
 
+  const visibleAlgorithms = ALGORITHMS.filter(algo => selectedIds.has(algo.id));
+
   return (
     <div className="max-w-7xl mx-auto px-6 py-8 pb-28 lg:pb-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* First 2 cards */}
-        {ALGORITHMS.slice(0, 2).map((algo) => (
+        {/* First 2 visible cards */}
+        {visibleAlgorithms.slice(0, 2).map((algo) => (
           <SortCard 
             key={algo.id}
             title={algo.title}
@@ -156,7 +158,7 @@ export const Dashboard = ({ data, speed, setSpeed, arraySize, setArraySize, onRa
             algorithm={algo.fn}
             initialData={data}
             speed={speed}
-            isSelected={selectedIds.has(algo.id)}
+            isSelected={true} // Always selected if visible
             onToggleSelect={() => toggleSelect(algo.id)}
             triggerRun={triggerMap[algo.id] || 0}
             triggerStop={stopTrigger}
@@ -164,7 +166,7 @@ export const Dashboard = ({ data, speed, setSpeed, arraySize, setArraySize, onRa
           />
         ))}
         
-        {/* ControlCard at row 1 col 3 (Desktop only) */}
+        {/* ControlCard - Always visible */}
         <ControlCard 
           selectedIds={selectedIds}
           onToggleSelect={toggleSelect}
@@ -176,8 +178,8 @@ export const Dashboard = ({ data, speed, setSpeed, arraySize, setArraySize, onRa
           isRunningAny={activeIds.size > 0}
         />
         
-        {/* Remaining 6 cards */}
-        {ALGORITHMS.slice(2).map((algo) => (
+        {/* Remaining visible cards */}
+        {visibleAlgorithms.slice(2).map((algo) => (
           <SortCard 
             key={algo.id}
             title={algo.title}
@@ -186,8 +188,8 @@ export const Dashboard = ({ data, speed, setSpeed, arraySize, setArraySize, onRa
             algorithm={algo.fn}
             initialData={data}
             speed={speed}
-            isSelected={selectedIds.has(algo.id)}
-            onToggleSelect={() => toggleSelect(algo.id)}
+            isSelected={true} // Always selected if visible
+            onToggleSelect={() => toggleSelect(algo.id)} // This will hide it
             triggerRun={triggerMap[algo.id] || 0}
             triggerStop={stopTrigger}
             onEnd={(stats) => handleSortEnd(algo.id, stats)}

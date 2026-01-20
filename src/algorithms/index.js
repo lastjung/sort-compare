@@ -244,3 +244,62 @@ export const cocktailSort = async (array, onStep) => {
 
   return arr;
 };
+
+export const ALGORITHMS = [
+  { 
+    id: 'bubble', 
+    title: 'Bubble Sort', 
+    fn: bubbleSort, 
+    complexity: 'O(n²)', 
+    desc: 'Swaps adjacent elements if they are in wrong order.' 
+  },
+  { 
+    id: 'selection', 
+    title: 'Selection Sort', 
+    fn: selectionSort, 
+    complexity: 'O(n²)', 
+    desc: 'Selects the smallest element and moves it to the sorted part.' 
+  },
+  { 
+    id: 'insertion', 
+    title: 'Insertion Sort', 
+    fn: insertionSort, 
+    complexity: 'O(n²)', 
+    desc: 'Builds the sorted array one item at a time by comparison.' 
+  },
+  { 
+    id: 'quick', 
+    title: 'Quick Sort', 
+    fn: quickSort, 
+    complexity: 'O(n log n)', 
+    desc: 'Divides array into partitions and sorts them recursively.' 
+  },
+  { 
+    id: 'merge', 
+    title: 'Merge Sort', 
+    fn: mergeSort, 
+    complexity: 'O(n log n)', 
+    desc: 'Recursively divides array in half and merges sorted parts.' 
+  },
+  { 
+    id: 'heap', 
+    title: 'Heap Sort', 
+    fn: heapSort, 
+    complexity: 'O(n log n)', 
+    desc: 'Builds a max-heap and repeatedly extracts the maximum.' 
+  },
+  { 
+    id: 'shell', 
+    title: 'Shell Sort', 
+    fn: shellSort, 
+    complexity: 'O(n log n)', 
+    desc: 'Sorts elements at specific intervals, reducing the gap.' 
+  },
+  { 
+    id: 'cocktail', 
+    title: 'Cocktail Sort', 
+    fn: cocktailSort, 
+    complexity: 'O(n²)', 
+    desc: 'Bidirectional bubble sort, shaking elements both ways.' 
+  },
+];

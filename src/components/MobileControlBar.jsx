@@ -39,7 +39,8 @@ export const MobileControlBar = ({
   ];
 
   return (
-    <div className="lg:hidden fixed bottom-6 left-4 right-4 z-40 flex flex-col gap-2">
+    <div className="lg:hidden fixed bottom-6 left-0 right-0 z-40 px-6 pointer-events-none">
+      <div className="max-w-7xl mx-auto flex flex-col gap-2 pointer-events-auto">
       {/* Expanded Menu (Algorithm Selection) */}
       {isMenuOpen && (
         <div className="bg-slate-800/90 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-4 shadow-2xl mb-2 animate-in slide-in-from-bottom-5 fade-in duration-200">
@@ -79,10 +80,11 @@ export const MobileControlBar = ({
           {/* Algorithm Selection (2-column grid) */}
           <div className="grid grid-cols-2 gap-2">
             {ALGO_LABELS.map(algo => (
-              <label
+              <div
                 key={algo.id}
+                onClick={() => onToggleSelect(algo.id)}
                 className={cn(
-                  "flex items-center gap-3 p-3 rounded-xl border transition-all active:scale-95",
+                  "flex items-center gap-3 p-3 rounded-xl border transition-all active:scale-95 cursor-pointer",
                   selectedIds.has(algo.id)
                     ? "bg-indigo-500/20 border-indigo-500/50 text-indigo-200"
                     : "bg-slate-900/40 border-slate-700/50 text-slate-400"
@@ -95,7 +97,7 @@ export const MobileControlBar = ({
                   {selectedIds.has(algo.id) && <div className="w-2 h-2 bg-white rounded-sm" />}
                 </div>
                 <span className="text-sm font-medium">{algo.label}</span>
-              </label>
+              </div>
             ))}
           </div>
           
@@ -170,7 +172,7 @@ export const MobileControlBar = ({
             {isRunningAny ? (
             <button
               onClick={onStopAll}
-              className="w-full h-12 flex items-center justify-center gap-2 bg-rose-400 hover:bg-rose-300 text-white rounded-xl font-bold shadow-lg shadow-rose-400/30 active:scale-95 transition-all"
+              className="w-full h-12 flex items-center justify-center gap-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-xl font-bold shadow-lg shadow-rose-900/10 active:scale-95 transition-all"
             >
               <Square size={16} fill="currentColor" /> STOP
             </button>
@@ -184,6 +186,7 @@ export const MobileControlBar = ({
             </button>
             )}
         </div>
+      </div>
       </div>
     </div>
   );
