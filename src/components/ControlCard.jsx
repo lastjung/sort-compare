@@ -10,8 +10,12 @@ export const ControlCard = ({
   onReset,
   onSelectAll, 
   onDeselectAll,
-  isRunningAny
+  isRunningAny,
+  onRiggedRandomize,
+  shuffleRange,
+  setShuffleRange
 }) => {
+  const [isTournamentActive, setIsTournamentActive] = React.useState(true);
 
   const ALGO_LABELS = [
     { id: 'bubble', label: 'Bubble' },
@@ -25,65 +29,43 @@ export const ControlCard = ({
   ];
 
   return (
-    <div className="hidden lg:flex bg-slate-800/60 backdrop-blur-xl border border-indigo-500/30 rounded-xl p-4 flex-col gap-3 shadow-2xl relative overflow-hidden group">
+    <div className="hidden lg:flex bg-slate-800/60 backdrop-blur-xl border border-indigo-500/30 rounded-xl p-4 flex-col gap-2 shadow-2xl relative overflow-hidden group h-[320px]">
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent pointer-events-none" />
       
-      {/* Header with Title */}
+      {/* Header */}
       <div className="flex items-center gap-2">
-        <Zap size={16} className="text-amber-400 fill-amber-400/20" />
-        <h3 className="text-xs font-bold text-white uppercase tracking-widest">Control</h3>
+        <Zap size={14} className="text-indigo-400 fill-indigo-400/20" />
+        <h3 className="text-[10px] font-bold text-white uppercase tracking-widest leading-none">Control</h3>
       </div>
 
-      {/* Action Buttons (Top) */}
+      {/* Action Buttons */}
       <div className="flex gap-2">
         <button 
           onClick={onReset}
-          className="group flex items-center justify-center gap-1.5 px-3 py-2.5 bg-slate-700/50 hover:bg-slate-700 hover:text-white text-slate-300 rounded-lg font-bold text-xs border border-slate-600/50 transition-all active:scale-95"
+          className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-slate-700/50 hover:bg-slate-700 hover:text-white text-slate-300 rounded-lg font-bold text-[10px] border border-slate-600/50 transition-all active:scale-95"
         >
-          <RotateCcw size={14} className="transition-transform duration-500 group-hover:-rotate-180" /> RESET
+          <RotateCcw size={11} /> RESET
         </button>
         {isRunningAny ? (
           <button 
             onClick={onStopAll}
-            className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 rounded-lg font-bold text-xs border border-rose-500/30 transition-all active:scale-95"
+            className="flex-1 flex items-center justify-center gap-2 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 rounded-lg font-bold text-[10px] border border-rose-500/30 transition-all active:scale-95"
           >
-            <Square size={14} fill="currentColor" /> STOP ALL
+            <Square size={11} fill="currentColor" /> STOP ALL
           </button>
         ) : (
           <button 
             onClick={onRunSelected}
             disabled={selectedIds.size === 0}
-            className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-30 text-white rounded-lg font-bold text-xs shadow-xl shadow-indigo-500/30 transition-all active:scale-95"
+            className="flex-1 flex items-center justify-center gap-2 py-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-30 text-white rounded-lg font-bold text-[10px] shadow-xl shadow-indigo-500/30 transition-all active:scale-95"
           >
-            <Play size={16} fill="currentColor" /> RUN SELECTED
+            <Play size={11} fill="currentColor" /> RUN SELECTED
           </button>
         )}
       </div>
 
-      {/* Select All Button (Full Width) */}
-      <button
-        onClick={() => selectedIds.size === 8 ? onDeselectAll() : onSelectAll()}
-        className={cn(
-          "w-full flex items-center justify-center gap-2 py-2 rounded-lg border transition-all active:scale-95",
-          selectedIds.size === 8 
-            ? "bg-indigo-500/20 border-indigo-500/40 text-indigo-200" 
-            : "bg-slate-900/40 border-slate-700/50 text-slate-400 hover:text-slate-300"
-        )}
-      >
-        <div className={cn(
-          "w-4 h-4 rounded border flex items-center justify-center",
-          selectedIds.size === 8 ? "bg-indigo-500 border-indigo-500" : selectedIds.size > 0 ? "bg-indigo-500/50 border-indigo-500" : "border-slate-600"
-        )}>
-          {selectedIds.size === 8 && <div className="w-2 h-2 bg-white rounded-sm" />}
-          {selectedIds.size > 0 && selectedIds.size < 8 && <div className="w-2 h-[2px] bg-white" />}
-        </div>
-        <span className="text-xs font-bold uppercase tracking-wide">
-          {selectedIds.size === 8 ? 'Deselect All' : `Select All (${selectedIds.size}/8)`}
-        </span>
-      </button>
-
-      {/* Algorithm Selection Grid (2x4) */}
-      <div className="grid grid-cols-2 gap-2">
+      {/* Algorithm Selection Grid */}
+      <div className="grid grid-cols-2 gap-1.5">
         {ALGO_LABELS.map(algo => (
           <label 
             key={algo.id}
@@ -101,14 +83,85 @@ export const ControlCard = ({
               onChange={() => onToggleSelect(algo.id)}
             />
             <div className={cn(
-              "w-4 h-4 rounded border flex items-center justify-center transition-all flex-shrink-0",
+              "w-3 h-3 rounded border flex items-center justify-center transition-all flex-shrink-0",
               selectedIds.has(algo.id) ? "bg-indigo-500 border-indigo-500" : "border-slate-600"
             )}>
-              {selectedIds.has(algo.id) && <div className="w-2 h-2 bg-white rounded-sm" />}
+              {selectedIds.has(algo.id) && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
             </div>
-            <span className="text-xs font-bold uppercase tracking-tight">{algo.label}</span>
+            <span className="text-[10px] font-bold uppercase tracking-tight">{algo.label}</span>
           </label>
         ))}
+      </div>
+
+      {/* Select All Button */}
+      <button
+        onClick={() => selectedIds.size === 8 ? onDeselectAll() : onSelectAll()}
+        className={cn(
+          "w-full flex items-center justify-center gap-2 py-2 rounded-lg border transition-all active:scale-95 text-[10px]",
+          selectedIds.size === 8 
+            ? "bg-indigo-500/20 border-indigo-500/40 text-indigo-200" 
+            : "bg-slate-900/40 border-slate-700/50 text-slate-400 hover:text-slate-300"
+        )}
+      >
+        <div className={cn(
+          "w-3.5 h-3.5 rounded border flex items-center justify-center",
+          selectedIds.size === 8 ? "bg-indigo-500 border-indigo-500" : selectedIds.size > 0 ? "bg-indigo-500/50 border-indigo-500" : "border-slate-600"
+        )}>
+          {selectedIds.size === 8 && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
+          {selectedIds.size > 0 && selectedIds.size < 8 && <div className="w-2 h-[2px] bg-white" />}
+        </div>
+        <span className="font-bold uppercase leading-none">
+          {selectedIds.size === 8 ? 'Deselect All' : `Select All (${selectedIds.size}/8)`}
+        </span>
+      </button>
+
+      {/* Separator */}
+      <div className="h-px bg-slate-700/50 my-0.5" />
+
+      {/* Tournament Management (One Row) */}
+      <div className="mt-auto flex items-center gap-2 bg-indigo-500/5 p-1 rounded-xl border border-indigo-500/20">
+        {/* Toggle Switch */}
+        <button 
+          onClick={() => setIsTournamentActive(!isTournamentActive)}
+          className={cn(
+            "w-8 h-4.5 rounded-full p-0.5 transition-all flex-shrink-0 relative",
+            isTournamentActive ? "bg-indigo-500" : "bg-slate-700 font-bold"
+          )}
+        >
+          <div className={cn(
+            "w-3.5 h-3.5 bg-white rounded-full transition-all transform shadow-sm",
+            isTournamentActive ? "translate-x-3.5" : "translate-x-0"
+          )} />
+        </button>
+
+        {/* -+ Control Grouped on Left */}
+        <div className="flex items-center bg-indigo-500/10 rounded border border-indigo-500/30 overflow-hidden h-7">
+          <button 
+            onClick={() => setShuffleRange(Math.max(0, shuffleRange - 5))}
+            className="w-6 h-full flex items-center justify-center hover:bg-indigo-500 hover:text-white text-indigo-400 text-xs font-bold transition-all border-r border-indigo-500/30"
+          >-</button>
+          <div className="px-1.5 text-[10px] font-mono font-bold text-indigo-300 min-w-[28px] text-center">
+            {shuffleRange}%
+          </div>
+          <button 
+            onClick={() => setShuffleRange(Math.min(100, shuffleRange + 5))}
+            className="w-6 h-full flex items-center justify-center hover:bg-indigo-500 hover:text-white text-indigo-400 text-xs font-bold transition-all border-l border-indigo-500/30"
+          >+</button>
+        </div>
+
+        {/* Shuffle Button filling the rest on the right */}
+        <button 
+          onClick={onRiggedRandomize}
+          disabled={!isTournamentActive}
+          className={cn(
+            "flex-1 h-7 rounded-lg font-bold text-[10px] transition-all active:scale-95 flex items-center justify-center gap-1.5 uppercase",
+            isTournamentActive 
+              ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20" 
+              : "bg-slate-800 text-slate-700 cursor-not-allowed opacity-50"
+          )}
+        >
+          <Zap size={10} fill="currentColor" /> Shuffle
+        </button>
       </div>
     </div>
   );

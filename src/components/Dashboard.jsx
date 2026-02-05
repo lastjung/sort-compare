@@ -64,7 +64,17 @@ const ALGORITHMS = [
   },
 ];
 
-export const Dashboard = ({ data, speed, setSpeed, arraySize, setArraySize, onRandomize }) => {
+export const Dashboard = ({ 
+  data, 
+  speed, 
+  setSpeed, 
+  arraySize, 
+  setArraySize, 
+  onRandomize,
+  onRiggedRandomize,
+  shuffleRange,
+  setShuffleRange 
+}) => {
   const [selectedIds, setSelectedIds] = useState(new Set(ALGORITHMS.map(a => a.id)));
   const [triggerMap, setTriggerMap] = useState({});
   const [activeIds, setActiveIds] = useState(new Set());
@@ -138,7 +148,9 @@ export const Dashboard = ({ data, speed, setSpeed, arraySize, setArraySize, onRa
       // Check if all completed
       if (runningSetRef.current.size === 0 && Object.keys(resultsRef.current).length > 0) {
         setScoreboardResults(Object.values(resultsRef.current));
-        setShowScoreboard(true);
+        setTimeout(() => {
+          setShowScoreboard(true);
+        }, 1000);
       }
     }
   };
@@ -176,6 +188,9 @@ export const Dashboard = ({ data, speed, setSpeed, arraySize, setArraySize, onRa
           onSelectAll={selectAll}
           onDeselectAll={deselectAll}
           isRunningAny={activeIds.size > 0}
+          onRiggedRandomize={onRiggedRandomize}
+          shuffleRange={shuffleRange}
+          setShuffleRange={setShuffleRange}
         />
         
         {/* Remaining visible cards */}
@@ -212,6 +227,9 @@ export const Dashboard = ({ data, speed, setSpeed, arraySize, setArraySize, onRa
           speed={speed}
           setSpeed={setSpeed}
           onRandomize={onRandomize}
+          onRiggedRandomize={onRiggedRandomize}
+          shuffleRange={shuffleRange}
+          setShuffleRange={setShuffleRange}
         />
       
       {showScoreboard && (

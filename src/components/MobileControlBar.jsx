@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, RotateCcw, Settings2, CheckSquare, Square, ChevronUp, ChevronDown, Volume2, VolumeX, Sliders, RefreshCcw } from 'lucide-react';
+import { Play, RotateCcw, Settings2, CheckSquare, Square, ChevronUp, ChevronDown, Volume2, VolumeX, Sliders, RefreshCcw, Zap } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { audioEngine } from '../utils/audio';
 
@@ -16,10 +16,14 @@ export const MobileControlBar = ({
   setArraySize,
   speed,
   setSpeed,
-  onRandomize
+  onRandomize,
+  onRiggedRandomize,
+  shuffleRange,
+  setShuffleRange
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(false);
+  const [isTournamentActive, setIsTournamentActive] = useState(true);
 
   const toggleSound = () => {
     const next = !soundEnabled;
@@ -60,49 +64,95 @@ export const MobileControlBar = ({
             </button>
           </div>
           
-          {/* Row 2: Randomize + Select All (2-column grid) */}
+          {/* Row 2: Tournament Toggle & Rigged Shuffle - Compact Single Row */}
+          <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-1.5 mb-3 flex items-center gap-2">
+            {/* Toggle Switch */}
+            <button 
+              onClick={() => setIsTournamentActive(!isTournamentActive)}
+              className={cn(
+                "w-8 h-4.5 rounded-full p-0.5 transition-all flex-shrink-0 relative",
+                isTournamentActive ? "bg-indigo-500" : "bg-slate-700"
+              )}
+            >
+              <div className={cn(
+                "w-3.5 h-3.5 bg-white rounded-full transition-all transform shadow-sm",
+                isTournamentActive ? "translate-x-3.5" : "translate-x-0"
+              )} />
+            </button>
+
+            {/* -+ Control Grouped */}
+            <div className="flex items-center bg-indigo-500/10 rounded border border-indigo-500/30 overflow-hidden h-8">
+              <button 
+                onClick={() => setShuffleRange(Math.max(0, shuffleRange - 5))}
+                className="w-7 h-full flex items-center justify-center hover:bg-indigo-500 hover:text-white text-indigo-400 text-xs font-bold transition-all border-r border-indigo-500/30"
+              >-</button>
+              <div className="px-1.5 text-[10px] font-mono font-bold text-indigo-300 min-w-[28px] text-center">
+                {shuffleRange}%
+              </div>
+              <button 
+                onClick={() => setShuffleRange(Math.min(100, shuffleRange + 5))}
+                className="w-7 h-full flex items-center justify-center hover:bg-indigo-500 hover:text-white text-indigo-400 text-xs font-bold transition-all border-l border-indigo-500/30"
+              >+</button>
+            </div>
+
+            {/* Shuffle Button */}
+            <button 
+              onClick={onRiggedRandomize}
+              disabled={!isTournamentActive}
+              className={cn(
+                "flex-1 h-8 px-2 rounded-lg font-bold text-[10px] transition-all active:scale-95 flex items-center justify-center gap-1.5 uppercase",
+                isTournamentActive 
+                  ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20" 
+                  : "bg-slate-800 text-slate-700 cursor-not-allowed opacity-50"
+              )}
+            >
+              <Zap size={12} fill="currentColor" /> Shuffle
+            </button>
+          </div>
+
+          {/* Row 3: Randomize + Select All (2-column grid) */}
           <div className="grid grid-cols-2 gap-2 mb-3">
             <button 
               onClick={onRandomize}
-              className="flex items-center justify-center gap-2 py-2.5 bg-slate-100 hover:bg-white text-slate-900 rounded-lg font-bold text-xs transition-all active:scale-95"
+              className="flex items-center justify-center gap-2 py-2.5 bg-slate-100 hover:bg-white text-slate-900 rounded-lg font-bold text-xs transition-all active:scale-95 px-2"
             >
               <RefreshCcw size={14} />
-              Randomize
+              Regular Random
             </button>
             <button
               onClick={() => selectedIds.size === 8 ? onDeselectAll() : onSelectAll()}
-              className="flex items-center justify-center py-2.5 text-xs font-bold uppercase tracking-wide rounded-lg bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 active:bg-indigo-600"
+              className="flex items-center justify-center py-2.5 text-xs font-bold uppercase tracking-wide rounded-lg bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 active:bg-indigo-600 px-2"
             >
-              {selectedIds.size === 8 ? 'Deselect All' : 'Select All'}
+              {selectedIds.size === 8 ? 'Deselect All' : `Select All (${selectedIds.size})`}
             </button>
           </div>
           
           {/* Algorithm Selection (2-column grid) */}
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2 max-h-[160px] overflow-y-auto pr-1 custom-scrollbar">
             {ALGO_LABELS.map(algo => (
               <div
                 key={algo.id}
                 onClick={() => onToggleSelect(algo.id)}
                 className={cn(
-                  "flex items-center gap-3 p-3 rounded-xl border transition-all active:scale-95 cursor-pointer",
+                  "flex items-center gap-3 p-2.5 rounded-xl border transition-all active:scale-95 cursor-pointer",
                   selectedIds.has(algo.id)
                     ? "bg-indigo-500/20 border-indigo-500/50 text-indigo-200"
                     : "bg-slate-900/40 border-slate-700/50 text-slate-400"
                 )}
               >
                 <div className={cn(
-                  "w-4 h-4 rounded border flex items-center justify-center transition-all",
+                  "w-3.5 h-3.5 rounded border flex items-center justify-center transition-all flex-shrink-0",
                   selectedIds.has(algo.id) ? "bg-indigo-500 border-indigo-500" : "border-slate-600"
                 )}>
-                  {selectedIds.has(algo.id) && <div className="w-2 h-2 bg-white rounded-sm" />}
+                  {selectedIds.has(algo.id) && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
                 </div>
-                <span className="text-sm font-medium">{algo.label}</span>
+                <span className="text-[11px] font-medium truncate">{algo.label}</span>
               </div>
             ))}
           </div>
           
           {/* Sliders Section */}
-          <div className="mt-4 pt-4 border-t border-white/5 grid grid-cols-2 gap-4">
+          <div className="mt-3 pt-3 border-t border-white/5 grid grid-cols-2 gap-4">
             {/* Count Slider */}
             <div className="flex flex-col gap-1.5">
               <div className="flex justify-between items-center">
@@ -117,7 +167,7 @@ export const MobileControlBar = ({
                 max="100" 
                 value={arraySize} 
                 onChange={(e) => setArraySize(Number(e.target.value))}
-                className="accent-indigo-500 h-1.5 w-full bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                className="accent-indigo-500 h-1 w-full bg-slate-700 rounded-lg appearance-none cursor-pointer"
               />
             </div>
             
@@ -135,7 +185,7 @@ export const MobileControlBar = ({
                 max="1000" 
                 value={speed} 
                 onChange={(e) => setSpeed(Number(e.target.value))}
-                className="accent-indigo-500 h-1.5 w-full bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                className="accent-indigo-500 h-1 w-full bg-slate-700 rounded-lg appearance-none cursor-pointer"
               />
             </div>
           </div>

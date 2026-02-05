@@ -1,16 +1,21 @@
 import React, { useState, useCallback } from 'react';
 import { ControlPanel } from './components/ControlPanel';
 import { Dashboard } from './components/Dashboard';
-import { generateRandomArray } from './utils/data';
+import { generateRandomArray, generateRiggedArray } from './utils/data';
 
 function App() {
   const [arraySize, setArraySize] = useState(50);
   const [speed, setSpeed] = useState(800);
-  const [data, setData] = useState(() => generateRandomArray(50)); // Initialize directly
+  const [data, setData] = useState(() => generateRandomArray(50));
+  const [shuffleRange, setShuffleRange] = useState(70);
 
   const randomize = useCallback(() => {
     setData(generateRandomArray(arraySize));
   }, [arraySize]);
+
+  const riggedRandomize = useCallback(() => {
+    setData(generateRiggedArray(arraySize, shuffleRange));
+  }, [arraySize, shuffleRange]);
 
 
   return (
@@ -22,6 +27,9 @@ function App() {
         speed={speed}
         setSpeed={setSpeed}
         onRandomize={randomize}
+        onRiggedRandomize={riggedRandomize}
+        shuffleRange={shuffleRange}
+        setShuffleRange={setShuffleRange}
       />
       <main className="relative">
         <Dashboard 
@@ -31,6 +39,9 @@ function App() {
           arraySize={arraySize}
           setArraySize={setArraySize}
           onRandomize={randomize} 
+          onRiggedRandomize={riggedRandomize}
+          shuffleRange={shuffleRange}
+          setShuffleRange={setShuffleRange}
         />
       </main>
       
