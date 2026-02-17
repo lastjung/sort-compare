@@ -10,6 +10,8 @@ export const bubbleSort = async (array, onStep) => {
         await onStep(arr, [j, j + 1], 'swap');
       }
     }
+    // Final element of this pass is now in its correct place
+    await onStep(arr, [], 'progress', [arr.length - i - 1]);
   }
   return arr;
 };
@@ -28,6 +30,8 @@ export const selectionSort = async (array, onStep) => {
       [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
       await onStep(arr, [i, minIdx], 'swap');
     }
+    // i-th element is now in its correct place
+    await onStep(arr, [], 'progress', [i]);
   }
   return arr;
 };
@@ -66,6 +70,9 @@ export const quickSort = async (array, onStep) => {
     }
     [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
     await onStep(arr, [i + 1, high], 'swap');
+    
+    // Pivot position is now fixed
+    await onStep(arr, [], 'progress', [i + 1]);
     return i + 1;
   };
 
@@ -74,6 +81,9 @@ export const quickSort = async (array, onStep) => {
       let pi = await partition(low, high);
       await sort(low, pi - 1);
       await sort(pi + 1, high);
+    } else if (low === high) {
+      // Single element is also finalized
+      await onStep(arr, [], 'progress', [low]);
     }
   };
 
@@ -171,8 +181,12 @@ export const heapSort = async (array, onStep) => {
   for (let i = n - 1; i > 0; i--) {
     [arr[0], arr[i]] = [arr[i], arr[0]];
     await onStep(arr, [0, i], 'swap');
+    // i-th element is now in its correct place
+    await onStep(arr, [], 'progress', [i]);
     await heapify(i, 0);
   }
+  // The last remaining element is also finalized
+  await onStep(arr, [], 'progress', [0]);
 
   return arr;
 };
@@ -224,8 +238,15 @@ export const cocktailSort = async (array, onStep) => {
       }
     }
 
-    if (!swapped) break;
+    if (!swapped) {
+      // If no swaps, entire remaining subarray is finalized
+      const indices = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+      await onStep(arr, [], 'progress', indices);
+      break;
+    }
 
+    // end-th element is now fixed
+    await onStep(arr, [], 'progress', [end]);
     end--;
     swapped = false;
 
@@ -239,6 +260,8 @@ export const cocktailSort = async (array, onStep) => {
       }
     }
 
+    // start-th element is now fixed
+    await onStep(arr, [], 'progress', [start]);
     start++;
   }
 

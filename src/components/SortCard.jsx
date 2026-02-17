@@ -5,7 +5,7 @@ import { cn } from '../utils/cn';
 import { Play, Activity, ArrowLeftRight, Clock } from 'lucide-react';
 
 export const SortCard = ({ title, algorithm, complexity, desc, initialData, speed, triggerRun, triggerStop, isSelected, onToggleSelect, onEnd }) => {
-  const { array, comparing, swapping, sorted, isRunning, stats, runSort, stop } = 
+  const { array, comparing, swapping, finalized, sorted, isRunning, stats, runSort, stop } = 
     useSorting(initialData, algorithm, speed, triggerRun, triggerStop, onEnd);
 
   // initialData changes are handled by useSorting's initialArray prop
@@ -31,7 +31,7 @@ export const SortCard = ({ title, algorithm, complexity, desc, initialData, spee
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-bold text-indigo-300 group-hover:text-indigo-200 transition-colors uppercase tracking-widest leading-none">{title}</h3>
+            <h3 className="text-sm font-black text-cyan-100 group-hover:text-white transition-colors uppercase tracking-widest leading-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">{title}</h3>
             {complexity && (
               <div className="group/badge relative w-fit">
                 <span className="text-[10px] bg-slate-700/50 text-indigo-300 px-1.5 py-0.5 rounded cursor-help font-mono border border-slate-600/50 transition-colors hover:bg-indigo-500/20 hover:border-indigo-500/30 hover:text-indigo-200">
@@ -75,6 +75,7 @@ export const SortCard = ({ title, algorithm, complexity, desc, initialData, spee
             max={max}
             isComparing={comparing.includes(idx)}
             isSwapping={swapping.includes(idx)}
+            isFinalized={finalized.includes(idx)}
             isSorted={sorted}
           />
         ))}

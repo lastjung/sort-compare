@@ -22,7 +22,7 @@ export const ControlPanel = ({
   };
 
   return (
-    <div className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-white/5 shadow-2xl">
+    <div className="lg:sticky top-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-white/5 lg:shadow-2xl">
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between gap-6">
           {/* Logo & Title */}

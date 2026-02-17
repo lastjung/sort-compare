@@ -19,11 +19,12 @@ export const MobileControlBar = ({
   onRandomize,
   onRiggedRandomize,
   shuffleRange,
-  setShuffleRange
+  setShuffleRange,
+  isTournamentActive,
+  setIsTournamentActive
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(false);
-  const [isTournamentActive, setIsTournamentActive] = useState(true);
 
   const toggleSound = () => {
     const next = !soundEnabled;

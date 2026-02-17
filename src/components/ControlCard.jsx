@@ -13,9 +13,10 @@ export const ControlCard = ({
   isRunningAny,
   onRiggedRandomize,
   shuffleRange,
-  setShuffleRange
+  setShuffleRange,
+  isTournamentActive,
+  setIsTournamentActive
 }) => {
-  const [isTournamentActive, setIsTournamentActive] = React.useState(true);
 
   const ALGO_LABELS = [
     { id: 'bubble', label: 'Bubble' },

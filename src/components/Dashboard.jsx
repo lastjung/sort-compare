@@ -79,6 +79,7 @@ export const Dashboard = ({
   const [triggerMap, setTriggerMap] = useState({});
   const [activeIds, setActiveIds] = useState(new Set());
   const [stopTrigger, setStopTrigger] = useState(0);
+  const [isTournamentActive, setIsTournamentActive] = useState(false);
   
   // Scoreboard state
   const [showScoreboard, setShowScoreboard] = useState(false);
@@ -191,6 +192,8 @@ export const Dashboard = ({
           onRiggedRandomize={onRiggedRandomize}
           shuffleRange={shuffleRange}
           setShuffleRange={setShuffleRange}
+          isTournamentActive={isTournamentActive}
+          setIsTournamentActive={setIsTournamentActive}
         />
         
         {/* Remaining visible cards */}
@@ -230,6 +233,8 @@ export const Dashboard = ({
           onRiggedRandomize={onRiggedRandomize}
           shuffleRange={shuffleRange}
           setShuffleRange={setShuffleRange}
+          isTournamentActive={isTournamentActive}
+          setIsTournamentActive={setIsTournamentActive}
         />
       
       {showScoreboard && (

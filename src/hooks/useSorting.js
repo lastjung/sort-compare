@@ -6,6 +6,7 @@ export const useSorting = (initialArray, sortingAlgorithm, speed, triggerRun, tr
   const [array, setArray] = useState([...initialArray]);
   const [comparing, setComparing] = useState([]);
   const [swapping, setSwapping] = useState([]);
+  const [finalized, setFinalized] = useState([]);
   const [sorted, setSorted] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [stats, setStats] = useState({ comparisons: 0, swaps: 0, time: 0 });
@@ -26,6 +27,7 @@ export const useSorting = (initialArray, sortingAlgorithm, speed, triggerRun, tr
       setSorted(false);
       setComparing([]);
       setSwapping([]);
+      setFinalized([]);
       setStats({ comparisons: 0, swaps: 0, time: 0 });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -45,6 +47,7 @@ export const useSorting = (initialArray, sortingAlgorithm, speed, triggerRun, tr
     setSorted(false);
     setComparing([]);
     setSwapping([]);
+    setFinalized([]);
     setStats({ comparisons: 0, swaps: 0, time: 0 });
   }, [stop]);
 
@@ -65,6 +68,7 @@ export const useSorting = (initialArray, sortingAlgorithm, speed, triggerRun, tr
         setSorted(false);
         setComparing([]);
         setSwapping([]);
+        setFinalized([]);
         setStats({ comparisons: 0, swaps: 0, time: 0 });
       });
     } else {
@@ -79,7 +83,7 @@ export const useSorting = (initialArray, sortingAlgorithm, speed, triggerRun, tr
     const mySessionId = ++sessionIdRef.current;
     const startTime = performance.now();
     
-    const onStep = async (newArray, indices, type) => {
+    const onStep = async (newArray, indices, type, finalizedIndices = []) => {
       if (mySessionId !== sessionIdRef.current) {
         // This is an old session, stop it silently
         throw new Error('STOP'); 
@@ -89,6 +93,10 @@ export const useSorting = (initialArray, sortingAlgorithm, speed, triggerRun, tr
       const elapsed = baseTime + Math.round(currentTime - startTime);
 
       setArray([...newArray]);
+      if (finalizedIndices.length > 0) {
+        setFinalized(prev => [...new Set([...prev, ...finalizedIndices])]);
+      }
+
       if (indices.length > 0) {
         audioEngine.playNote(newArray[indices[0]], maxValRef.current);
       }
@@ -170,5 +178,5 @@ export const useSorting = (initialArray, sortingAlgorithm, speed, triggerRun, tr
     }
   }, [triggerStop]);
 
-  return { array, comparing, swapping, sorted, isRunning, stats, runSort, stop, reset, toggle };
+  return { array, comparing, swapping, finalized, sorted, isRunning, stats, runSort, stop, reset, toggle };
 };
