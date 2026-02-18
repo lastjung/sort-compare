@@ -14,7 +14,7 @@ export const SortCard = ({ title, algorithm, complexity, desc, initialData, spee
 
   return (
     <div className={cn(
-      "bg-slate-800/40 border rounded-xl p-4 flex flex-col h-[320px] transition-all group relative overflow-hidden",
+      "bg-slate-800/40 border rounded-xl p-4 flex flex-col h-[400px] md:h-[320px] transition-all group relative overflow-hidden",
       isSelected ? "border-indigo-500/50 bg-indigo-500/5" : "border-slate-700 hover:border-slate-600"
     )}>
       <div className="flex justify-between items-center mb-4 min-h-[32px]">
