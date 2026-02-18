@@ -4,7 +4,7 @@ import { SortBar } from './SortBar';
 import { cn } from '../utils/cn';
 import { Play, Activity, ArrowLeftRight, Clock } from 'lucide-react';
 
-export const SortCard = ({ title, algorithm, complexity, desc, initialData, speed, triggerRun, triggerStop, isSelected, onToggleSelect, onEnd }) => {
+export const SortCard = ({ title, algorithm, complexity, desc, initialData, speed, triggerRun, triggerStop, isSelected, onToggleSelect, onEnd, rank }) => {
   const { array, comparing, swapping, finalized, sorted, isRunning, stats, runSort, stop } = 
     useSorting(initialData, algorithm, speed, triggerRun, triggerStop, onEnd);
 
@@ -98,6 +98,26 @@ export const SortCard = ({ title, algorithm, complexity, desc, initialData, spee
           <span className="text-sm font-mono text-slate-200">{(stats.time / 1000).toFixed(2)}s</span>
         </div>
       </div>
+
+      {rank && (
+        <div className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none animate-in zoom-in-50 duration-300">
+          <div className="bg-black/40 absolute inset-0" />
+          <div className={cn(
+            "relative px-6 py-3 rounded-2xl shadow-2xl border-2 flex flex-col items-center transform rotate-[-5deg]",
+            rank === 1 ? "bg-yellow-500/20 border-yellow-400 text-yellow-300" :
+            rank === 2 ? "bg-slate-300/20 border-slate-300 text-slate-200" :
+            rank === 3 ? "bg-orange-700/20 border-orange-500 text-orange-300" :
+            "bg-slate-800/80 border-slate-600 text-slate-400"
+          )}>
+            <span className="text-4xl filter drop-shadow-lg">
+              {rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '🏁'}
+            </span>
+            <span className="text-xl font-black uppercase tracking-widest mt-1 filter drop-shadow-md">
+              {rank === 1 ? '1st Place' : rank === 2 ? '2nd Place' : rank === 3 ? '3rd Place' : `${rank}th Place`}
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

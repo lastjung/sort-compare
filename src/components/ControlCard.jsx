@@ -128,6 +128,7 @@ export const ControlCard = ({
             "w-8 h-4.5 rounded-full p-0.5 transition-all flex-shrink-0 relative",
             isTournamentActive ? "bg-indigo-500" : "bg-slate-700 font-bold"
           )}
+          title="Tournament Mode"
         >
           <div className={cn(
             "w-3.5 h-3.5 bg-white rounded-full transition-all transform shadow-sm",
@@ -139,30 +140,42 @@ export const ControlCard = ({
         <div className="flex items-center bg-indigo-500/10 rounded border border-indigo-500/30 overflow-hidden h-7">
           <button 
             onClick={() => setShuffleRange(Math.max(0, shuffleRange - 5))}
-            className="w-6 h-full flex items-center justify-center hover:bg-indigo-500 hover:text-white text-indigo-400 text-xs font-bold transition-all border-r border-indigo-500/30"
+            className="w-5 h-full flex items-center justify-center hover:bg-indigo-500 hover:text-white text-indigo-400 text-[10px] font-bold transition-all border-r border-indigo-500/30"
           >-</button>
-          <div className="px-1.5 text-[10px] font-mono font-bold text-indigo-300 min-w-[28px] text-center">
+          <div className="px-1 text-[10px] font-mono font-bold text-indigo-300 min-w-[24px] text-center">
             {shuffleRange}%
           </div>
           <button 
             onClick={() => setShuffleRange(Math.min(100, shuffleRange + 5))}
-            className="w-6 h-full flex items-center justify-center hover:bg-indigo-500 hover:text-white text-indigo-400 text-xs font-bold transition-all border-l border-indigo-500/30"
+            className="w-5 h-full flex items-center justify-center hover:bg-indigo-500 hover:text-white text-indigo-400 text-[10px] font-bold transition-all border-l border-indigo-500/30"
           >+</button>
         </div>
 
-        {/* Shuffle Button filling the rest on the right */}
-        <button 
-          onClick={onRiggedRandomize}
-          disabled={!isTournamentActive}
-          className={cn(
-            "flex-1 h-7 rounded-lg font-bold text-[10px] transition-all active:scale-95 flex items-center justify-center gap-1.5 uppercase",
-            isTournamentActive 
-              ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20" 
-              : "bg-slate-800 text-slate-700 cursor-not-allowed opacity-50"
+        {/* Action Buttons */}
+        <div className="flex-1 flex gap-1">
+          <button 
+            onClick={onRiggedRandomize}
+            disabled={!isTournamentActive}
+            className={cn(
+              "flex-1 h-7 rounded-lg font-bold text-[10px] transition-all active:scale-95 flex items-center justify-center gap-1 uppercase",
+              isTournamentActive 
+                ? "bg-indigo-600/50 hover:bg-indigo-500 text-white border border-indigo-500/30" 
+                : "bg-slate-800 text-slate-700 cursor-not-allowed opacity-50"
+            )}
+          >
+            <Zap size={10} fill="currentColor" /> Shuffle
+          </button>
+          
+          {isTournamentActive && (
+            <button 
+              onClick={onRunSelected}
+              disabled={selectedIds.size === 0 || isRunningAny}
+              className="flex-1 h-7 rounded-lg font-bold text-[10px] transition-all active:scale-95 flex items-center justify-center gap-1 uppercase bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white shadow-lg shadow-orange-500/20 border border-orange-400/50 animate-in fade-in zoom-in duration-300"
+            >
+              <Play size={10} fill="currentColor" /> RACE
+            </button>
           )}
-        >
-          <Zap size={10} fill="currentColor" /> Shuffle
-        </button>
+        </div>
       </div>
     </div>
   );
