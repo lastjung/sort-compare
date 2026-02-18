@@ -10,8 +10,8 @@ export const SortBar = ({ value, max, isComparing, isSwapping, isFinalized, isSo
         "flex-1 mx-[1px] rounded-t-sm transition-all duration-150",
         (isSorted || isFinalized) ? "bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.5)]" :
         isSwapping ? "bg-emerald-400 scale-y-110 z-10 shadow-[0_0_12px_rgba(52,211,153,0.6)]" :
-        isComparing ? "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]" :
-        "bg-indigo-500/60 hover:bg-indigo-400"
+        isComparing ? "bg-yellow-300 shadow-[0_0_8px_rgba(253,224,71,0.6)]" :
+        "bg-pink-400 hover:bg-pink-300"
       )}
       style={{ height: `${height}%` }}
     />

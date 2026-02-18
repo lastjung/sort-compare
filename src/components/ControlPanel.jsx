@@ -31,8 +31,8 @@ export const ControlPanel = ({
               <LayoutGrid className="text-white" size={24} />
             </div>
             <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-                Sort Algo Compare
+              <h1 className="text-xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-sky-400 to-emerald-400">
+                Sort Visualizer
               </h1>
               <p className="text-xs text-slate-500 font-medium tracking-tight hidden md:block">VISUALIZING PERFORMANCE</p>
             </div>
