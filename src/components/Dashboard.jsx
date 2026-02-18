@@ -123,7 +123,9 @@ export const Dashboard = ({
     originalSpeedRef.current = speed;
     
     if (isTournamentActive) {
-      setLogs([{ time: '0.0s', text: `🏁 Race Started! ${selectedIds.size} Contenders fighting for glory!`, type: 'start' }]);
+      setTimeout(() => {
+        setLogs([{ time: '1.0s', text: `🏁 Race Started! ${selectedIds.size} Contenders fighting for glory!`, type: 'start' }]);
+      }, 1000);
       
       // Intermediate Commentary (after 10s)
       setTimeout(() => {
@@ -242,7 +244,25 @@ export const Dashboard = ({
                 
                 setTimeout(() => {
                     addLog(`🏁 Race Finished! Winner: ${first}, 2nd: ${second}, 3rd: ${third}... and Last Place: ${last}.`, 'finish-1');
-                }, 1000); 
+                }, 1000);
+
+                // 3. Auto-save commentary to tube/ folder
+                setTimeout(() => {
+                  setLogs(currentLogs => {
+                    fetch('/api/save-commentary', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        createdAt: new Date().toISOString(),
+                        logs: currentLogs,
+                      }),
+                    })
+                    .then(r => r.json())
+                    .then(d => console.log(`💾 Commentary saved: ${d.filename}`))
+                    .catch(e => console.error('Failed to save commentary:', e));
+                    return currentLogs;
+                  });
+                }, 2000);
             }
         }
       }

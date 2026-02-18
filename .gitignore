@@ -35,3 +35,6 @@ Thumbs.db
 .stylelintcache
 .vite-inspect
 .turbo
+
+# Temp audio (voice commentary generation)
+temp_audio*

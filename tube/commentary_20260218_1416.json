@@ -1,0 +1,65 @@
+{
+  "createdAt": "2026-02-18T19:16:33.835Z",
+  "logs": [
+    {
+      "time": "1.0s",
+      "text": "🏁 Race Started! 8 Contenders fighting for glory!",
+      "type": "start"
+    },
+    {
+      "time": "10.0s",
+      "text": "👀 Looks like Quick Sort and Merge Sort are pulling ahead as expected!",
+      "type": "info"
+    },
+    {
+      "time": "85.2s",
+      "text": "🥇 Quick Sort takes the GOLD! Incredible speed!",
+      "type": "finish-1"
+    },
+    {
+      "time": "103.4s",
+      "text": "🥈 Merge Sort takes Silver! Just missed it!",
+      "type": "finish-2"
+    },
+    {
+      "time": "136.5s",
+      "text": "🥉 Heap Sort grabs Bronze! Top 3 decided!",
+      "type": "finish-3"
+    },
+    {
+      "time": "140.3s",
+      "text": "🐌 Bubble and Cocktail sorts have a long way to go. Speeding up for you!",
+      "type": "info"
+    },
+    {
+      "time": "140.3s",
+      "text": "Shell Sort finishes 4th. Solid performance.",
+      "type": "info"
+    },
+    {
+      "time": "153.1s",
+      "text": "Insertion Sort finishes #5!",
+      "type": "info"
+    },
+    {
+      "time": "154.5s",
+      "text": "Selection Sort finishes #6!",
+      "type": "info"
+    },
+    {
+      "time": "161.0s",
+      "text": "Cocktail Sort finishes #7!",
+      "type": "info"
+    },
+    {
+      "time": "166.6s",
+      "text": "Bubble Sort finishes #8!",
+      "type": "info"
+    },
+    {
+      "time": "167.6s",
+      "text": "🏁 Race Finished! Winner: Quick Sort, 2nd: Merge Sort, 3rd: Heap Sort... and Last Place: Bubble Sort.",
+      "type": "finish-1"
+    }
+  ]
+}
