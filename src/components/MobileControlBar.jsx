@@ -34,6 +34,7 @@ export const MobileControlBar = ({
 
   const ALGO_LABELS = [
     { id: 'bubble', label: 'Bubble' },
+    { id: 'optimized-bubble', label: 'Opt. Bubble' },
     { id: 'selection', label: 'Selection' },
     { id: 'insertion', label: 'Insertion' },
     { id: 'quick', label: 'Quick' },
@@ -41,6 +42,7 @@ export const MobileControlBar = ({
     { id: 'heap', label: 'Heap' },
     { id: 'shell', label: 'Shell' },
     { id: 'cocktail', label: 'Cocktail' },
+    { id: 'comb', label: 'Comb' },
   ];
 
   return (
@@ -121,10 +123,10 @@ export const MobileControlBar = ({
               Regular Random
             </button>
             <button
-              onClick={() => selectedIds.size === 8 ? onDeselectAll() : onSelectAll()}
+              onClick={() => selectedIds.size === 10 ? onDeselectAll() : onSelectAll()}
               className="flex items-center justify-center py-2.5 text-xs font-bold uppercase tracking-wide rounded-lg bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 active:bg-indigo-600 px-2"
             >
-              {selectedIds.size === 8 ? 'Deselect All' : `Select All (${selectedIds.size})`}
+              {selectedIds.size === 10 ? 'Deselect All' : `Select All (${selectedIds.size})`}
             </button>
           </div>
           

@@ -16,6 +16,31 @@ export const bubbleSort = async (array, onStep) => {
   return arr;
 };
 
+export const optimizedBubbleSort = async (array, onStep) => {
+  let arr = [...array];
+  let n = arr.length;
+  for (let i = 0; i < n; i++) {
+    let swapped = false;
+    for (let j = 0; j < n - i - 1; j++) {
+      await onStep(arr, [j, j + 1], 'compare');
+      if (arr[j] > arr[j + 1]) {
+        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+        await onStep(arr, [j, j + 1], 'swap');
+        swapped = true;
+      }
+    }
+    if (!swapped) {
+      // If no swaps occurred, the rest of the array is already sorted
+      const remainingIndices = Array.from({ length: n - i }, (_, idx) => idx);
+      await onStep(arr, [], 'progress', remainingIndices);
+      break;
+    }
+    // Final element of this pass is now in its correct place
+    await onStep(arr, [], 'progress', [n - i - 1]);
+  }
+  return arr;
+};
+
 export const selectionSort = async (array, onStep) => {
   let arr = [...array];
   for (let i = 0; i < arr.length; i++) {
@@ -268,6 +293,36 @@ export const cocktailSort = async (array, onStep) => {
   return arr;
 };
 
+export const combSort = async (array, onStep) => {
+  let arr = [...array];
+  const n = arr.length;
+  let gap = n;
+  const shrink = 1.3;
+  let sorted = false;
+
+  while (!sorted) {
+    gap = Math.floor(gap / shrink);
+    if (gap <= 1) {
+      gap = 1;
+      sorted = true;
+    }
+
+    for (let i = 0; i + gap < n; i++) {
+      await onStep(arr, [i, i + gap], 'compare');
+      if (arr[i] > arr[i + gap]) {
+        [arr[i], arr[i + gap]] = [arr[i + gap], arr[i]];
+        await onStep(arr, [i, i + gap], 'swap');
+        sorted = false;
+      }
+    }
+  }
+
+  // Finalize all elements as sorted
+  const allIndices = Array.from({ length: n }, (_, i) => i);
+  await onStep(arr, [], 'progress', allIndices);
+  return arr;
+};
+
 export const ALGORITHMS = [
   { 
     id: 'bubble', 
@@ -275,6 +330,13 @@ export const ALGORITHMS = [
     fn: bubbleSort, 
     complexity: 'O(n²)', 
     desc: 'Swaps adjacent elements if they are in wrong order.' 
+  },
+  { 
+    id: 'optimized-bubble', 
+    title: 'Optimized Bubble Sort', 
+    fn: optimizedBubbleSort, 
+    complexity: 'O(n²)', 
+    desc: 'Bubble sort with early exit if array becomes sorted.' 
   },
   { 
     id: 'selection', 
@@ -324,5 +386,12 @@ export const ALGORITHMS = [
     fn: cocktailSort, 
     complexity: 'O(n²)', 
     desc: 'Bidirectional bubble sort, shaking elements both ways.' 
+  },
+  { 
+    id: 'comb', 
+    title: 'Comb Sort', 
+    fn: combSort, 
+    complexity: 'O(n log n)', 
+    desc: 'Improves bubble sort by eliminating turtles using a gap.' 
   },
 ];

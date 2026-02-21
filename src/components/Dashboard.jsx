@@ -4,7 +4,7 @@ import { ControlCard } from './ControlCard';
 import { MobileControlBar } from './MobileControlBar';
 import { Scoreboard } from './Scoreboard';
 import { CommentaryPanel } from './CommentaryPanel';
-import { bubbleSort, selectionSort, insertionSort, quickSort, mergeSort, heapSort, shellSort, cocktailSort } from '../algorithms';
+import { bubbleSort, optimizedBubbleSort, selectionSort, insertionSort, quickSort, mergeSort, heapSort, shellSort, cocktailSort, combSort } from '../algorithms';
 
 const ALGORITHMS = [
   { 
@@ -13,6 +13,13 @@ const ALGORITHMS = [
     fn: bubbleSort, 
     complexity: 'O(n²)', 
     desc: 'Swaps adjacent elements if they are in wrong order.' 
+  },
+  { 
+    id: 'optimized-bubble', 
+    title: 'Optimized Bubble Sort', 
+    fn: optimizedBubbleSort, 
+    complexity: 'O(n²)', 
+    desc: 'Bubble sort with early exit if array becomes sorted.' 
   },
   { 
     id: 'selection', 
@@ -62,6 +69,13 @@ const ALGORITHMS = [
     fn: cocktailSort, 
     complexity: 'O(n²)', 
     desc: 'Bidirectional bubble sort, shaking elements both ways.' 
+  },
+  { 
+    id: 'comb', 
+    title: 'Comb Sort', 
+    fn: combSort, 
+    complexity: 'O(n log n)', 
+    desc: 'Improves bubble sort by eliminating turtles using a gap.' 
   },
 ];
 
@@ -294,7 +308,7 @@ export const Dashboard = ({
         ))}
         
         {/* ControlCard - Wrapped for Commentary Anchor */}
-        <div className="relative group/control">
+        <div className="relative group/control hidden lg:block">
           <ControlCard 
             selectedIds={selectedIds}
             onToggleSelect={toggleSelect}

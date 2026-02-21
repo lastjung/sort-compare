@@ -20,6 +20,7 @@ export const ControlCard = ({
 
   const ALGO_LABELS = [
     { id: 'bubble', label: 'Bubble' },
+    { id: 'optimized-bubble', label: 'Opt. Bubble' },
     { id: 'selection', label: 'Selection' },
     { id: 'insertion', label: 'Insertion' },
     { id: 'quick', label: 'Quick' },
@@ -27,10 +28,11 @@ export const ControlCard = ({
     { id: 'heap', label: 'Heap' },
     { id: 'shell', label: 'Shell' },
     { id: 'cocktail', label: 'Cocktail' },
+    { id: 'comb', label: 'Comb' },
   ];
 
   return (
-    <div className="hidden lg:flex bg-slate-800/60 backdrop-blur-xl border border-indigo-500/30 rounded-xl p-4 flex-col gap-2 shadow-2xl relative overflow-hidden group h-[320px]">
+    <div className="hidden lg:flex bg-slate-800/60 backdrop-blur-xl border border-indigo-500/30 rounded-xl p-4 flex-col gap-2 shadow-2xl relative overflow-hidden group h-[360px]">
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent pointer-events-none" />
       
       {/* Header */}
@@ -96,23 +98,23 @@ export const ControlCard = ({
 
       {/* Select All Button */}
       <button
-        onClick={() => selectedIds.size === 8 ? onDeselectAll() : onSelectAll()}
+        onClick={() => selectedIds.size === 10 ? onDeselectAll() : onSelectAll()}
         className={cn(
           "w-full flex items-center justify-center gap-2 py-2 rounded-lg border transition-all active:scale-95 text-[10px]",
-          selectedIds.size === 8 
+          selectedIds.size === 10 
             ? "bg-indigo-500/20 border-indigo-500/40 text-indigo-200" 
             : "bg-slate-900/40 border-slate-700/50 text-slate-400 hover:text-slate-300"
         )}
       >
         <div className={cn(
           "w-3.5 h-3.5 rounded border flex items-center justify-center",
-          selectedIds.size === 8 ? "bg-indigo-500 border-indigo-500" : selectedIds.size > 0 ? "bg-indigo-500/50 border-indigo-500" : "border-slate-600"
+          selectedIds.size === 10 ? "bg-indigo-500 border-indigo-500" : selectedIds.size > 0 ? "bg-indigo-500/50 border-indigo-500" : "border-slate-600"
         )}>
-          {selectedIds.size === 8 && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
-          {selectedIds.size > 0 && selectedIds.size < 8 && <div className="w-2 h-[2px] bg-white" />}
+          {selectedIds.size === 10 && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
+          {selectedIds.size > 0 && selectedIds.size < 10 && <div className="w-2 h-[2px] bg-white" />}
         </div>
         <span className="font-bold uppercase leading-none">
-          {selectedIds.size === 8 ? 'Deselect All' : `Select All (${selectedIds.size}/8)`}
+          {selectedIds.size === 10 ? 'Deselect All' : `Select All (${selectedIds.size}/10)`}
         </span>
       </button>
 
