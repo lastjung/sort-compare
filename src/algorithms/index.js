@@ -116,6 +116,104 @@ export const quickSort = async (array, onStep) => {
   return arr;
 };
 
+// Intro Sort: quick sort + heap sort fallback + insertion sort for small partitions.
+export const introSort = async (array, onStep) => {
+  const arr = [...array];
+  const n = arr.length;
+  const SIZE_THRESHOLD = 16;
+  const maxDepth = 2 * Math.floor(Math.log2(Math.max(2, n)));
+
+  const swap = async (i, j) => {
+    if (i === j) return;
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+    await onStep(arr, [i, j], 'swap');
+  };
+
+  const insertionSortRange = async (left, right) => {
+    for (let i = left + 1; i <= right; i++) {
+      const key = arr[i];
+      let j = i - 1;
+      await onStep(arr, [i, j], 'compare');
+      while (j >= left && arr[j] > key) {
+        arr[j + 1] = arr[j];
+        await onStep(arr, [j, j + 1], 'swap');
+        j--;
+        if (j >= left) await onStep(arr, [j, i], 'compare');
+      }
+      arr[j + 1] = key;
+      await onStep(arr, [j + 1], 'swap');
+    }
+  };
+
+  const heapifyRange = async (left, heapSize, root) => {
+    let largest = root;
+    const l = 2 * root + 1;
+    const r = 2 * root + 2;
+
+    if (l < heapSize) {
+      await onStep(arr, [left + largest, left + l], 'compare');
+      if (arr[left + l] > arr[left + largest]) largest = l;
+    }
+    if (r < heapSize) {
+      await onStep(arr, [left + largest, left + r], 'compare');
+      if (arr[left + r] > arr[left + largest]) largest = r;
+    }
+    if (largest !== root) {
+      await swap(left + root, left + largest);
+      await heapifyRange(left, heapSize, largest);
+    }
+  };
+
+  const heapSortRange = async (left, right) => {
+    const heapSize = right - left + 1;
+    for (let i = Math.floor(heapSize / 2) - 1; i >= 0; i--) {
+      await heapifyRange(left, heapSize, i);
+    }
+    for (let end = heapSize - 1; end > 0; end--) {
+      await swap(left, left + end);
+      await heapifyRange(left, end, 0);
+    }
+  };
+
+  const partition = async (left, right) => {
+    const pivot = arr[right];
+    let i = left - 1;
+    for (let j = left; j < right; j++) {
+      await onStep(arr, [j, right], 'compare');
+      if (arr[j] < pivot) {
+        i++;
+        await swap(i, j);
+      }
+    }
+    await swap(i + 1, right);
+    return i + 1;
+  };
+
+  const sort = async (left, right, depth) => {
+    if (left >= right) return;
+
+    if (right - left + 1 <= SIZE_THRESHOLD) {
+      await insertionSortRange(left, right);
+      return;
+    }
+
+    if (depth === 0) {
+      await heapSortRange(left, right);
+      return;
+    }
+
+    const pivotIndex = await partition(left, right);
+    await onStep(arr, [], 'progress', [pivotIndex]);
+    await sort(left, pivotIndex - 1, depth - 1);
+    await sort(pivotIndex + 1, right, depth - 1);
+  };
+
+  await sort(0, n - 1, maxDepth);
+  const allIndices = Array.from({ length: n }, (_, idx) => idx);
+  await onStep(arr, [], 'progress', allIndices);
+  return arr;
+};
+
 export const mergeSort = async (array, onStep) => {
   let arr = [...array];
 
@@ -163,6 +261,81 @@ export const mergeSort = async (array, onStep) => {
   };
 
   await sort(0, arr.length - 1);
+  return arr;
+};
+
+// Tim Sort (simplified): insertion sort on small runs + iterative merge.
+export const timSort = async (array, onStep) => {
+  const arr = [...array];
+  const n = arr.length;
+  const MIN_RUN = 32;
+
+  const insertionSortRange = async (left, right) => {
+    for (let i = left + 1; i <= right; i++) {
+      const key = arr[i];
+      let j = i - 1;
+
+      await onStep(arr, [i, j], 'compare');
+      while (j >= left && arr[j] > key) {
+        arr[j + 1] = arr[j];
+        await onStep(arr, [j, j + 1], 'swap');
+        j--;
+        if (j >= left) await onStep(arr, [j, i], 'compare');
+      }
+      arr[j + 1] = key;
+      await onStep(arr, [j + 1], 'swap');
+    }
+  };
+
+  const merge = async (left, mid, right) => {
+    const leftPart = arr.slice(left, mid + 1);
+    const rightPart = arr.slice(mid + 1, right + 1);
+
+    let i = 0;
+    let j = 0;
+    let k = left;
+
+    while (i < leftPart.length && j < rightPart.length) {
+      await onStep(arr, [left + i, mid + 1 + j], 'compare');
+      if (leftPart[i] <= rightPart[j]) {
+        arr[k] = leftPart[i++];
+      } else {
+        arr[k] = rightPart[j++];
+      }
+      await onStep(arr, [k], 'swap');
+      k++;
+    }
+
+    while (i < leftPart.length) {
+      arr[k] = leftPart[i++];
+      await onStep(arr, [k], 'swap');
+      k++;
+    }
+
+    while (j < rightPart.length) {
+      arr[k] = rightPart[j++];
+      await onStep(arr, [k], 'swap');
+      k++;
+    }
+  };
+
+  for (let left = 0; left < n; left += MIN_RUN) {
+    const right = Math.min(left + MIN_RUN - 1, n - 1);
+    await insertionSortRange(left, right);
+  }
+
+  for (let size = MIN_RUN; size < n; size *= 2) {
+    for (let left = 0; left < n; left += 2 * size) {
+      const mid = Math.min(left + size - 1, n - 1);
+      const right = Math.min(left + 2 * size - 1, n - 1);
+      if (mid < right) {
+        await merge(left, mid, right);
+      }
+    }
+  }
+
+  const allIndices = Array.from({ length: n }, (_, idx) => idx);
+  await onStep(arr, [], 'progress', allIndices);
   return arr;
 };
 
@@ -360,11 +533,25 @@ export const ALGORITHMS = [
     desc: 'Divides array into partitions and sorts them recursively.' 
   },
   { 
+    id: 'intro', 
+    title: 'Intro Sort', 
+    fn: introSort, 
+    complexity: 'O(n log n)', 
+    desc: 'Quick sort with depth limit fallback to heap sort and insertion sort for small ranges.' 
+  },
+  { 
     id: 'merge', 
     title: 'Merge Sort', 
     fn: mergeSort, 
     complexity: 'O(n log n)', 
     desc: 'Recursively divides array in half and merges sorted parts.' 
+  },
+  { 
+    id: 'tim', 
+    title: 'Tim Sort', 
+    fn: timSort, 
+    complexity: 'O(n log n)', 
+    desc: 'Hybrid of insertion and merge sort optimized for real-world data.' 
   },
   { 
     id: 'heap', 

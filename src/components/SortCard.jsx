@@ -11,10 +11,13 @@ export const SortCard = ({ title, algorithm, complexity, desc, initialData, spee
   // initialData changes are handled by useSorting's initialArray prop
 
   const max = Math.max(...array, 1);
+  const isLargeData = array.length > 100;
+  const barSpacingClass = isLargeData ? "mx-0 min-w-0 rounded-none" : "mx-[1px] rounded-t-sm";
 
   return (
     <div className={cn(
-      "bg-slate-800/40 border rounded-xl p-4 flex flex-col h-[400px] md:h-[320px] transition-all group relative overflow-hidden",
+      "bg-slate-800/40 border rounded-xl flex flex-col h-[400px] md:h-[320px] transition-all group relative overflow-hidden",
+      isLargeData ? "p-3" : "p-4",
       isSelected ? "border-indigo-500/50 bg-indigo-500/5" : "border-slate-700 hover:border-slate-600"
     )}>
       <div className="flex justify-between items-center mb-4 min-h-[32px]">
@@ -67,7 +70,7 @@ export const SortCard = ({ title, algorithm, complexity, desc, initialData, spee
         </div>
       </div>
 
-      <div className="flex-1 flex items-end justify-center mb-4 min-h-0">
+      <div className={cn("flex-1 flex items-end justify-center mb-4 min-h-0", isLargeData && "px-0.5")}>
         {array.map((value, idx) => (
           <SortBar 
             key={idx}
@@ -77,6 +80,7 @@ export const SortCard = ({ title, algorithm, complexity, desc, initialData, spee
             isSwapping={swapping.includes(idx)}
             isFinalized={finalized.includes(idx)}
             isSorted={sorted}
+            spacingClass={barSpacingClass}
           />
         ))}
       </div>

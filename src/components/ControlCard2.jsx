@@ -6,6 +6,8 @@ export const ControlCard2 = ({
   selectedIds,
   onRunSelected,
   isRunningAny,
+  arraySize,
+  onApplyDataSize,
   onRiggedRandomize,
   shuffleRange,
   setShuffleRange,
@@ -25,7 +27,7 @@ export const ControlCard2 = ({
 
         <div className="flex-1 flex items-end">
           <div className="w-full flex flex-col gap-2">
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-3 gap-2">
               <div className="h-8 rounded-lg border border-indigo-500/30 bg-indigo-500/10 flex items-center justify-between px-2">
                 <span className="text-[10px] font-bold uppercase tracking-wide text-indigo-300">Mode</span>
                 <button
@@ -45,6 +47,32 @@ export const ControlCard2 = ({
                 </button>
               </div>
 
+              <button
+                onClick={() => onApplyDataSize?.(100)}
+                className={cn(
+                  "h-8 rounded-lg font-bold text-[10px] uppercase border transition-all active:scale-95",
+                  arraySize === 100
+                    ? "bg-indigo-500/20 border-indigo-400/50 text-indigo-200"
+                    : "bg-slate-900/40 border-slate-700/50 text-slate-300 hover:text-white hover:border-slate-500"
+                )}
+              >
+                Base 100
+              </button>
+
+              <button
+                onClick={() => onApplyDataSize?.(200)}
+                className={cn(
+                  "h-8 rounded-lg font-bold text-[10px] uppercase border transition-all active:scale-95",
+                  arraySize === 200
+                    ? "bg-amber-500/20 border-amber-400/50 text-amber-200"
+                    : "bg-slate-900/40 border-slate-700/50 text-slate-300 hover:text-white hover:border-slate-500"
+                )}
+              >
+                Large 200
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
               <div className="h-8 flex items-center bg-indigo-500/10 rounded-lg border border-indigo-500/30 overflow-hidden">
                 <button
                   onClick={() => setShuffleRange(Math.max(0, shuffleRange - 5))}
@@ -62,9 +90,6 @@ export const ControlCard2 = ({
                   +
                 </button>
               </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={onRiggedRandomize}
                 className="h-8 rounded-lg font-bold text-[10px] transition-all active:scale-95 flex items-center justify-center gap-1 uppercase bg-indigo-600/60 hover:bg-indigo-500 text-white border border-indigo-500/30"

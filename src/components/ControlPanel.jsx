@@ -63,7 +63,7 @@ export const ControlPanel = ({
               <input 
                 type="range" 
                 min="10" 
-                max="100" 
+                max="200" 
                 value={arraySize} 
                 onChange={(e) => setArraySize(Number(e.target.value))}
                 className="accent-indigo-500 h-1.5 w-full bg-slate-700 rounded-lg appearance-none cursor-pointer"

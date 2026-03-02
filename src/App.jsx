@@ -4,9 +4,9 @@ import { Dashboard } from './components/Dashboard';
 import { generateRandomArray, generateRiggedArray } from './utils/data';
 
 function App() {
-  const [arraySize, setArraySize] = useState(50);
+  const [arraySize, setArraySize] = useState(100);
   const [speed, setSpeed] = useState(800);
-  const [data, setData] = useState(() => generateRandomArray(50));
+  const [data, setData] = useState(() => generateRandomArray(100));
   const [shuffleRange, setShuffleRange] = useState(70);
 
   const randomize = useCallback(() => {
@@ -20,6 +20,11 @@ function App() {
   const restoreCurrent = useCallback(() => {
     // Keep the same values but force a new array reference to reinitialize cards.
     setData(prev => [...prev]);
+  }, []);
+
+  const applyDataSize = useCallback((size) => {
+    setArraySize(size);
+    setData(generateRandomArray(size));
   }, []);
 
 
@@ -45,6 +50,7 @@ function App() {
           setArraySize={setArraySize}
           onRandomize={randomize} 
           onRestoreCurrent={restoreCurrent}
+          onApplyDataSize={applyDataSize}
           onRiggedRandomize={riggedRandomize}
           shuffleRange={shuffleRange}
           setShuffleRange={setShuffleRange}

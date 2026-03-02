@@ -38,12 +38,15 @@ export const MobileControlBar = ({
     { id: 'selection', label: 'Selection' },
     { id: 'insertion', label: 'Insertion' },
     { id: 'quick', label: 'Quick' },
+    { id: 'intro', label: 'Intro' },
     { id: 'merge', label: 'Merge' },
+    { id: 'tim', label: 'Tim' },
     { id: 'heap', label: 'Heap' },
     { id: 'shell', label: 'Shell' },
     { id: 'cocktail', label: 'Cocktail' },
     { id: 'comb', label: 'Comb' },
   ];
+  const totalAlgorithms = ALGO_LABELS.length;
 
   return (
     <div className="lg:hidden fixed bottom-6 left-0 right-0 z-40 px-6 pointer-events-none">
@@ -123,10 +126,10 @@ export const MobileControlBar = ({
               Regular Random
             </button>
             <button
-              onClick={() => selectedIds.size === 10 ? onDeselectAll() : onSelectAll()}
+              onClick={() => selectedIds.size === totalAlgorithms ? onDeselectAll() : onSelectAll()}
               className="flex items-center justify-center py-2.5 text-xs font-bold uppercase tracking-wide rounded-lg bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 active:bg-indigo-600 px-2"
             >
-              {selectedIds.size === 10 ? 'Deselect All' : `Select All (${selectedIds.size})`}
+              {selectedIds.size === totalAlgorithms ? 'Deselect All' : `Select All (${selectedIds.size}/${totalAlgorithms})`}
             </button>
           </div>
           
@@ -167,7 +170,7 @@ export const MobileControlBar = ({
               <input 
                 type="range" 
                 min="10" 
-                max="100" 
+                max="200" 
                 value={arraySize} 
                 onChange={(e) => setArraySize(Number(e.target.value))}
                 className="accent-indigo-500 h-1 w-full bg-slate-700 rounded-lg appearance-none cursor-pointer"

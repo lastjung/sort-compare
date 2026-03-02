@@ -5,7 +5,7 @@ import { ControlCard2 } from './ControlCard2';
 import { MobileControlBar } from './MobileControlBar';
 import { Scoreboard } from './Scoreboard';
 import { CommentaryPanel } from './CommentaryPanel';
-import { bubbleSort, optimizedBubbleSort, selectionSort, insertionSort, quickSort, mergeSort, heapSort, shellSort, cocktailSort, combSort } from '../algorithms';
+import { bubbleSort, optimizedBubbleSort, selectionSort, insertionSort, quickSort, introSort, mergeSort, timSort, heapSort, shellSort, cocktailSort, combSort } from '../algorithms';
 
 const ALGORITHMS = [
   { 
@@ -44,11 +44,25 @@ const ALGORITHMS = [
     desc: 'Divides array into partitions and sorts them recursively.' 
   },
   { 
+    id: 'intro', 
+    title: 'Intro Sort', 
+    fn: introSort, 
+    complexity: 'O(n log n)', 
+    desc: 'Quick sort with depth limit fallback to heap sort and insertion sort for small ranges.' 
+  },
+  { 
     id: 'merge', 
     title: 'Merge Sort', 
     fn: mergeSort, 
     complexity: 'O(n log n)', 
     desc: 'Recursively divides array in half and merges sorted parts.' 
+  },
+  { 
+    id: 'tim', 
+    title: 'Tim Sort', 
+    fn: timSort, 
+    complexity: 'O(n log n)', 
+    desc: 'Hybrid of insertion and merge sort optimized for real-world data.' 
   },
   { 
     id: 'heap', 
@@ -88,6 +102,7 @@ export const Dashboard = ({
   setArraySize, 
   onRandomize,
   onRestoreCurrent,
+  onApplyDataSize,
   onRiggedRandomize,
   shuffleRange,
   setShuffleRange 
@@ -177,7 +192,10 @@ export const Dashboard = ({
 
   const resetAll = () => {
     stopAll();
-    if (onRandomize) onRandomize();
+    // Wait a tick so stop state is reflected before pushing new random data.
+    setTimeout(() => {
+      if (onRandomize) onRandomize();
+    }, 0);
     setLogs([]);
     setRanking({});
     finishOrderRef.current = 0;
@@ -191,6 +209,19 @@ export const Dashboard = ({
     // Wait a tick so stop state is reflected before reinitializing card arrays.
     setTimeout(() => {
       if (onRestoreCurrent) onRestoreCurrent();
+    }, 0);
+    setLogs([]);
+    setRanking({});
+    finishOrderRef.current = 0;
+    if (isTournamentActive && speed !== originalSpeedRef.current) {
+      setSpeed(originalSpeedRef.current);
+    }
+  };
+
+  const applyDataSizeAll = (size) => {
+    stopAll();
+    setTimeout(() => {
+      if (onApplyDataSize) onApplyDataSize(size);
     }, 0);
     setLogs([]);
     setRanking({});
@@ -378,6 +409,8 @@ export const Dashboard = ({
           selectedIds={selectedIds}
           onRunSelected={runSelected}
           isRunningAny={activeIds.size > 0}
+          arraySize={arraySize}
+          onApplyDataSize={applyDataSizeAll}
           onRiggedRandomize={onRiggedRandomize}
           shuffleRange={shuffleRange}
           setShuffleRange={setShuffleRange}
