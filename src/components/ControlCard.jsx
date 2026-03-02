@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Square, CheckSquare, Zap, RotateCcw } from 'lucide-react';
+import { Play, Square, Zap, RotateCcw } from 'lucide-react';
 import { cn } from '../utils/cn';
 
 export const ControlCard = ({ 
@@ -8,14 +8,10 @@ export const ControlCard = ({
   onRunSelected, 
   onStopAll,
   onReset,
+  onRestore,
   onSelectAll, 
   onDeselectAll,
-  isRunningAny,
-  onRiggedRandomize,
-  shuffleRange,
-  setShuffleRange,
-  isTournamentActive,
-  setIsTournamentActive
+  isRunningAny
 }) => {
 
   const ALGO_LABELS = [
@@ -32,7 +28,7 @@ export const ControlCard = ({
   ];
 
   return (
-    <div className="hidden lg:flex bg-slate-800/60 backdrop-blur-xl border border-indigo-500/30 rounded-xl p-4 flex-col gap-2 shadow-2xl relative overflow-hidden group h-[360px]">
+    <div className="hidden lg:flex bg-slate-800/60 backdrop-blur-xl border border-indigo-500/30 rounded-xl p-4 flex-col gap-2 shadow-2xl relative overflow-hidden group h-[400px] md:h-[320px]">
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent pointer-events-none" />
       
       {/* Header */}
@@ -48,6 +44,12 @@ export const ControlCard = ({
           className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-slate-700/50 hover:bg-slate-700 hover:text-white text-slate-300 rounded-lg font-bold text-[10px] border border-slate-600/50 transition-all active:scale-95"
         >
           <RotateCcw size={11} /> RESET
+        </button>
+        <button
+          onClick={onRestore}
+          className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-slate-700/50 hover:bg-slate-700 hover:text-white text-slate-300 rounded-lg font-bold text-[10px] border border-slate-600/50 transition-all active:scale-95"
+        >
+          RESTORE
         </button>
         {isRunningAny ? (
           <button 
@@ -112,73 +114,12 @@ export const ControlCard = ({
         )}>
           {selectedIds.size === 10 && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
           {selectedIds.size > 0 && selectedIds.size < 10 && <div className="w-2 h-[2px] bg-white" />}
-        </div>
+          </div>
         <span className="font-bold uppercase leading-none">
           {selectedIds.size === 10 ? 'Deselect All' : `Select All (${selectedIds.size}/10)`}
         </span>
       </button>
 
-      {/* Separator */}
-      <div className="h-px bg-slate-700/50 my-0.5" />
-
-      {/* Tournament Management (One Row) */}
-      <div className="mt-auto flex items-center gap-2 bg-indigo-500/5 p-1 rounded-xl border border-indigo-500/20">
-        {/* Toggle Switch */}
-        <button 
-          onClick={() => setIsTournamentActive(!isTournamentActive)}
-          className={cn(
-            "w-8 h-4.5 rounded-full p-0.5 transition-all flex-shrink-0 relative",
-            isTournamentActive ? "bg-indigo-500" : "bg-slate-700 font-bold"
-          )}
-          title="Tournament Mode"
-        >
-          <div className={cn(
-            "w-3.5 h-3.5 bg-white rounded-full transition-all transform shadow-sm",
-            isTournamentActive ? "translate-x-3.5" : "translate-x-0"
-          )} />
-        </button>
-
-        {/* -+ Control Grouped on Left */}
-        <div className="flex items-center bg-indigo-500/10 rounded border border-indigo-500/30 overflow-hidden h-7">
-          <button 
-            onClick={() => setShuffleRange(Math.max(0, shuffleRange - 5))}
-            className="w-5 h-full flex items-center justify-center hover:bg-indigo-500 hover:text-white text-indigo-400 text-[10px] font-bold transition-all border-r border-indigo-500/30"
-          >-</button>
-          <div className="px-1 text-[10px] font-mono font-bold text-indigo-300 min-w-[24px] text-center">
-            {shuffleRange}%
-          </div>
-          <button 
-            onClick={() => setShuffleRange(Math.min(100, shuffleRange + 5))}
-            className="w-5 h-full flex items-center justify-center hover:bg-indigo-500 hover:text-white text-indigo-400 text-[10px] font-bold transition-all border-l border-indigo-500/30"
-          >+</button>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex-1 flex gap-1">
-          <button 
-            onClick={onRiggedRandomize}
-            disabled={!isTournamentActive}
-            className={cn(
-              "flex-1 h-7 rounded-lg font-bold text-[10px] transition-all active:scale-95 flex items-center justify-center gap-1 uppercase",
-              isTournamentActive 
-                ? "bg-indigo-600/50 hover:bg-indigo-500 text-white border border-indigo-500/30" 
-                : "bg-slate-800 text-slate-700 cursor-not-allowed opacity-50"
-            )}
-          >
-            <Zap size={10} fill="currentColor" /> Shuffle
-          </button>
-          
-          {isTournamentActive && (
-            <button 
-              onClick={onRunSelected}
-              disabled={selectedIds.size === 0 || isRunningAny}
-              className="flex-1 h-7 rounded-lg font-bold text-[10px] transition-all active:scale-95 flex items-center justify-center gap-1 uppercase bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white shadow-lg shadow-orange-500/20 border border-orange-400/50 animate-in fade-in zoom-in duration-300"
-            >
-              <Play size={10} fill="currentColor" /> RACE
-            </button>
-          )}
-        </div>
-      </div>
     </div>
   );
 };

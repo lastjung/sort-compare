@@ -17,6 +17,11 @@ function App() {
     setData(generateRiggedArray(arraySize, shuffleRange));
   }, [arraySize, shuffleRange]);
 
+  const restoreCurrent = useCallback(() => {
+    // Keep the same values but force a new array reference to reinitialize cards.
+    setData(prev => [...prev]);
+  }, []);
+
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100 selection:bg-indigo-500/30 pb-20">
@@ -39,6 +44,7 @@ function App() {
           arraySize={arraySize}
           setArraySize={setArraySize}
           onRandomize={randomize} 
+          onRestoreCurrent={restoreCurrent}
           onRiggedRandomize={riggedRandomize}
           shuffleRange={shuffleRange}
           setShuffleRange={setShuffleRange}

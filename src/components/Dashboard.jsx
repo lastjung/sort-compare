@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { SortCard } from './SortCard';
 import { ControlCard } from './ControlCard';
+import { ControlCard2 } from './ControlCard2';
 import { MobileControlBar } from './MobileControlBar';
 import { Scoreboard } from './Scoreboard';
 import { CommentaryPanel } from './CommentaryPanel';
@@ -86,6 +87,7 @@ export const Dashboard = ({
   arraySize, 
   setArraySize, 
   onRandomize,
+  onRestoreCurrent,
   onRiggedRandomize,
   shuffleRange,
   setShuffleRange 
@@ -181,6 +183,20 @@ export const Dashboard = ({
     finishOrderRef.current = 0;
     if (isTournamentActive && speed !== originalSpeedRef.current) {
         setSpeed(originalSpeedRef.current);
+    }
+  };
+
+  const restoreAll = () => {
+    stopAll();
+    // Wait a tick so stop state is reflected before reinitializing card arrays.
+    setTimeout(() => {
+      if (onRestoreCurrent) onRestoreCurrent();
+    }, 0);
+    setLogs([]);
+    setRanking({});
+    finishOrderRef.current = 0;
+    if (isTournamentActive && speed !== originalSpeedRef.current) {
+      setSpeed(originalSpeedRef.current);
     }
   };
 
@@ -315,14 +331,10 @@ export const Dashboard = ({
             onRunSelected={runSelected}
             onStopAll={stopAll}
             onReset={resetAll}
+            onRestore={restoreAll}
             onSelectAll={selectAll}
             onDeselectAll={deselectAll}
             isRunningAny={activeIds.size > 0}
-            onRiggedRandomize={onRiggedRandomize}
-            shuffleRange={shuffleRange}
-            setShuffleRange={setShuffleRange}
-            isTournamentActive={isTournamentActive}
-            setIsTournamentActive={setIsTournamentActive}
           />
           
           {/* Commentary Panel - Anchored to Control Card (Right Side) */}
@@ -360,6 +372,18 @@ export const Dashboard = ({
             rank={ranking[algo.id]}
           />
         ))}
+
+        {/* Control2 - Last item in sorting grid */}
+        <ControlCard2
+          selectedIds={selectedIds}
+          onRunSelected={runSelected}
+          isRunningAny={activeIds.size > 0}
+          onRiggedRandomize={onRiggedRandomize}
+          shuffleRange={shuffleRange}
+          setShuffleRange={setShuffleRange}
+          isTournamentActive={isTournamentActive}
+          setIsTournamentActive={setIsTournamentActive}
+        />
       </div>
       
       {/* MobileControlBar (Mobile + Tablet) */}
